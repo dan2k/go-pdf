@@ -1,6 +1,4 @@
 version: '3.8'
-volumes:
-  db-store:
 services:
   app:
     build: .
