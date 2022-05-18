@@ -25,7 +25,11 @@ services:
     ports:
       - 13306:3306
     volumes:
-      - mysql/data:/var/lib/mysql
+      - type: volume
+        source: db-store
+        target: /var/lib/mysql
+        volume:
+          nocopy: true
     environment:
       - MYSQL_DATABASE=${DB_NAME:-go_local}
       - MYSQL_USER=${DB_USER:-mitsu}
