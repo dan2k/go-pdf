@@ -1,7 +1,4 @@
 version: '3.8'
-volumes:
-  db-store:
-    driver: local
 services:
   app:
     build: .
