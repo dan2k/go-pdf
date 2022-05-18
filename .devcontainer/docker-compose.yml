@@ -29,7 +29,7 @@ services:
         source: db-store
         target: /var/lib/mysql
         volume:
-          nocopy: true
+          - ./mysql/data: db-store
     environment:
       - MYSQL_DATABASE=${DB_NAME:-go_local}
       - MYSQL_USER=${DB_USER:-mitsu}
