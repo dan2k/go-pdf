@@ -19,6 +19,8 @@ services:
       - DB_PASSWORD=${DB_PASS:-secret}
     ports:
       - 8080:8080
+    depends_on:
+      - db
   db:
     build:
       context: .
@@ -47,3 +49,5 @@ services:
       - db
     ports:
       - 4848:80
+    depends_on:
+      - db
