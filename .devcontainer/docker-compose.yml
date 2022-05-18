@@ -27,7 +27,7 @@ services:
     restart: always
     volumes:
       - type: volume
-        source: ../db
+        source: "../db"
         target: /var/lib/mysql
         volume:
           nocopy: true
