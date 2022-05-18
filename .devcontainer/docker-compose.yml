@@ -25,7 +25,7 @@ services:
     ports:
       - 13306:3306
     volumes:
-      - ./mysql/data: /var/lib/mysql
+      - mysql/data: /var/lib/mysql
       - type: volume
         source: db-store
         target: /var/lib/mysql
