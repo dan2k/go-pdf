@@ -19,9 +19,7 @@ services:
     ports:
       - 8080:8080
   db:
-    build:
-      context: .
-      dockerfile: ./mysql/Dockerfile
+    image: mysql
     ports:
       - 13306:3306
     restart: always
