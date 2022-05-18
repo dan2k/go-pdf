@@ -1,4 +1,6 @@
 version: '3.8'
+volumes:
+  db-store:
 services:
   app:
     build: .
@@ -24,7 +26,7 @@ services:
       - 13306:3306
     volumes:
       - type: volume
-        source: ./db
+        source: db-store
         target: /var/lib/mysql
         volume:
           nocopy: true
