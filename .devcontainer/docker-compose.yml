@@ -18,6 +18,8 @@ services:
       - DB_PASSWORD=${DB_PASS:-secret}
     ports:
       - 8080:8080
+    links:
+      - db
     depends_on:
       - db
   db:
@@ -28,11 +30,7 @@ services:
       - 13306:3306
     restart: always
     volumes:
-      - type: volume
-        source: db-store
-        target: /var/lib/mysql
-        volume:
-          nocopy: true
+      - '../db:/var/lib/mysql'
     environment:
       - MYSQL_DATABASE=${DB_NAME:-go_local}
       - MYSQL_USER=${DB_USER:-mitsu}
