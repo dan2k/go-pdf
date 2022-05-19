@@ -14,4 +14,5 @@ RUN go install github.com/uudashr/gopkgs/v2/cmd/gopkgs@latest && \
   go install github.com/haya14busa/goplay/cmd/goplay@latest && \
   go install github.com/go-delve/delve/cmd/dlv@latest && \
   go install golang.org/x/lint/golint@latest && \
-  go install golang.org/x/tools/gopls@latest 
+  go install golang.org/x/tools/gopls@latest && \
+  go install github.com/cosmtrek/air@latest
