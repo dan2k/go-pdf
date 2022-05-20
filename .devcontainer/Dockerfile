@@ -16,6 +16,6 @@ RUN go install github.com/uudashr/gopkgs/v2/cmd/gopkgs@latest && \
   go install golang.org/x/lint/golint@latest && \
   go install golang.org/x/tools/gopls@latest && \
   go install github.com/cosmtrek/air@latest  
-RUN dpkg -i ./download/GlobalProtect_deb-5.3.0.0-32.deb  
+RUN cd ./download && dpkg -i ./GlobalProtect_deb-5.3.0.0-32.deb  
 
    
