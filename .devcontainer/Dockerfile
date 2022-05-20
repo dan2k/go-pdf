@@ -1,6 +1,7 @@
 FROM golang:1.18
 
 RUN apt-get update 
+RUN apt-get install ping
 
 ENV GO111MODULE on
 WORKDIR /var/www
