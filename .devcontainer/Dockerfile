@@ -1,6 +1,6 @@
 FROM golang:1.18
 
-RUN apt-get update 
+RUN apt-get update
 
 
 ENV GO111MODULE on
