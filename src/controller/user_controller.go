@@ -1,6 +1,7 @@
 package controller
 
 import (
+	
 	"net/http"
 	"strconv"
 	"www/src/model"
@@ -13,7 +14,6 @@ func GetUser(c echo.Context) error {
 	id := uint(i)
 	user := model.User{}
 	user.FirstById(id)
-
 	return c.JSON(http.StatusOK, user)
 }
 

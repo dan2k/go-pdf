@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello")
+	fmt.Println("Wellcome to Golang")
+	fmt.Println("Start to Programming golang")
 	rt := router.Init()
 
 	rt.Logger.Fatal(rt.Start(":8080"))
