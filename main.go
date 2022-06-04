@@ -27,5 +27,6 @@ func main() {
 	r.POST("/login", auth.Login)
 	authorize:=r.Group("/users",middleware.JWTAuthen())
 	authorize.GET("/readall", user.ReadAll)
+	authorize.GET("/profile", user.Profile)
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
