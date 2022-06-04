@@ -1,17 +1,31 @@
 package main
 
 import (
-	"net/http"
+	"log"
+	"melivecode/go-jwt-api/controller/auth"
+	"melivecode/go-jwt-api/controller/user"
+	"melivecode/go-jwt-api/middleware"
+	"melivecode/go-jwt-api/orm"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
+func init() {
 
+    err := godotenv.Load(".env")
+
+    if err != nil {
+        log.Fatal("Error loading .env file")
+    }
+}
 func main() {
+	orm.InitDB()
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
-	r.Run("localhost:8080") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	r.Use(cors.Default())
+	r.POST("/register", auth.Register)
+	r.POST("/login", auth.Login)
+	authorize:=r.Group("/users",middleware.JWTAuthen())
+	authorize.GET("/readall", user.ReadAll)
+	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
