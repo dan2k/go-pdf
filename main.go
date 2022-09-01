@@ -10,7 +10,7 @@ func main() {
 	r := u.NewRequestPdf("")
 
 	//html template path
-	templatePath := "templates/sample.html"
+	templatePath := "templates/sample2.html"
 
 	//path for download pdf
 	outputPath := "storage/example.pdf"
