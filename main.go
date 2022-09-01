@@ -29,7 +29,7 @@ func main() {
 		Contact:     "Maria Anders",
 		Country:     "Germany",
 	}
-
+    
 	if err := r.ParseTemplate(templatePath, templateData); err == nil {
 		ok, _ := r.GeneratePDF(outputPath)
 		fmt.Println(ok, "pdf generated successfully")
