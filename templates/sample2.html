@@ -23,6 +23,11 @@
             background-color: #dddddd;
         }
         .reportGraph {width:900px}
+        @media print {
+            .new-page {
+                page-break-before: always;
+            }
+        }
     </style>
     <!--<script src="https://cdnjs.com/libraries/Chart.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
@@ -46,7 +51,7 @@
     </tr>
     </tbody>
 </table>
-
+<p class="new-page">Page 2, paragraph 1</p>
 <div class="reportGraph"><canvas id="canvas"></canvas></div>
 
 
