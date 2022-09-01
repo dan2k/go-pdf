@@ -22,8 +22,10 @@
         tr:nth-child(even) {
             background-color: #dddddd;
         }
+        .reportGraph {width:900px}
     </style>
-    <script src="https://cdnjs.com/libraries/Chart.js"></script>
+    <!--<script src="https://cdnjs.com/libraries/Chart.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 </head>
 <body>
 <h3>{{ .Title }}</h3>
@@ -44,10 +46,28 @@
     </tr>
     </tbody>
 </table>
-<canvas id="myChart" width="400" height="400"></canvas>
 
-<script>
-    const ctx = document.getElementById('myChart');
+<div class="reportGraph"><canvas id="canvas"></canvas></div>
+
+
+<script type="text/javascript">
+    'use strict';
+    (function(setLineDash) {
+        CanvasRenderingContext2D.prototype.setLineDash = function() {
+            if(!arguments[0].length){
+                arguments[0] = [1,0];
+            }
+            // Now, call the original method
+            return setLineDash.apply(this, arguments);
+        };
+    })(CanvasRenderingContext2D.prototype.setLineDash);
+    Function.prototype.bind = Function.prototype.bind || function (thisp) {
+        var fn = this;
+        return function () {
+            return fn.apply(thisp, arguments);
+        };
+    };
+    const ctx = document.getElementById('canvas');
     const myChart = new Chart(ctx, {
         type: 'bar',
         data: {
