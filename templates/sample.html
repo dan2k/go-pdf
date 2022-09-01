@@ -1,47 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Example Pdf</title>
-    <style>
-        h3{
-            text-align: center;
-        }
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        td, th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-
-        tr:nth-child(even) {
-            background-color: #dddddd;
-        }
-    </style>
+<meta charset="utf-8">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+<style>
+    .reportGraph {width:900px}
+</style>
 </head>
 <body>
-<h3>{{ .Title }}</h3>
-<p>{{.Description}}</p>
-<table>
-    <thead>
-    <tr>
-        <th>Company</th>
-        <th>Contact</th>
-        <th>Country</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>{{.Company}}</td>
-        <td>{{.Contact}}</td>
-        <td>{{.Country}}</td>
-    </tr>
-    </tbody>
-</table>
+
+<div class="reportGraph"><canvas id="canvas"></canvas></div>
+
+<script type="text/javascript">
+// wkhtmltopdf 0.12.5 crash fix.
+// https://github.com/wkhtmltopdf/wkhtmltopdf/issues/3242#issuecomment-518099192
+'use strict';
+(function(setLineDash) {
+    CanvasRenderingContext2D.prototype.setLineDash = function() {
+        if(!arguments[0].length){
+            arguments[0] = [1,0];
+        }
+        // Now, call the original method
+        return setLineDash.apply(this, arguments);
+    };
+})(CanvasRenderingContext2D.prototype.setLineDash);
+Function.prototype.bind = Function.prototype.bind || function (thisp) {
+    var fn = this;
+    return function () {
+        return fn.apply(thisp, arguments);
+    };
+};
+
+function drawGraphs() {
+    new Chart(
+        document.getElementById("canvas"), {
+            "responsive": false,
+            "type":"line",
+            "data":{"labels":["January","February","March","April","May","June","July"],"datasets":[{"label":"My First Dataset","data":[65,59,80,81,56,55,40],"fill":false,"borderColor":"rgb(75, 192, 192)","lineTension":0.1}]},
+            "options":{}
+        }
+    );
+}
+window.onload = function() {
+    drawGraphs();
+};
+</script>
 </body>
 </html>
