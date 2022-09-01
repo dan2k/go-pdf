@@ -1,32 +1,39 @@
 package main
 
 import (
-	"log"
-	"melivecode/go-jwt-api/controller/auth"
-	"melivecode/go-jwt-api/controller/user"
-	"melivecode/go-jwt-api/middleware"
-	"melivecode/go-jwt-api/orm"
-
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	u "go-pdf/pdfGenerator"
+	"fmt"
 )
-func init() {
 
-    err := godotenv.Load(".env")
-
-    if err != nil {
-        log.Fatal("Error loading .env file")
-    }
-}
 func main() {
-	orm.InitDB()
-	r := gin.Default()
-	r.Use(cors.Default())
-	r.POST("/register", auth.Register)
-	r.POST("/login", auth.Login)
-	authorize:=r.Group("/users",middleware.JWTAuthen())
-	authorize.GET("/readall", user.ReadAll)
-	authorize.GET("/profile", user.Profile)
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+
+	r := u.NewRequestPdf("")
+
+	//html template path
+	templatePath := "templates/sample.html"
+
+	//path for download pdf
+	outputPath := "storage/example.pdf"
+
+	//html template data
+	templateData := struct {
+		Title       string
+		Description string
+		Company     string
+		Contact     string
+		Country     string
+	}{
+		Title:       "HTML to PDF generator",
+		Description: "This is the simple HTML to PDF file.",
+		Company:     "Jhon Lewis",
+		Contact:     "Maria Anders",
+		Country:     "Germany",
+	}
+
+	if err := r.ParseTemplate(templatePath, templateData); err == nil {
+		ok, _ := r.GeneratePDF(outputPath)
+		fmt.Println(ok, "pdf generated successfully")
+	} else {
+		fmt.Println(err)
+	}
 }
