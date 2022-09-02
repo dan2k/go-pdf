@@ -67,11 +67,11 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// pdfg.Cover.EnableLocalFileAccess(true)
+	pdfg.Cover.EnableLocalFileAccess.Set(true)
 	pdfg.AddPage(wkhtmltopdf.NewPageReader(f))
 
 	pdfg.PageSize.Set(wkhtmltopdf.PageSizeA4)
-	pdfg.Cover.EnableLocalFileAccess.Set(true)
+	
 	pdfg.Dpi.Set(300)
 
 	err = pdfg.Create()
