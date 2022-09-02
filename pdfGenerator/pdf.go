@@ -71,14 +71,14 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 		log.Fatal(err)
 	}
 	page := wkhtmltopdf.NewPageReader(f)
-	workingDir, err := os.Getwd()
+	// workingDir, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
 	// fmt.Println(workingDir)
 	
 	// page.Allow.Set(filepath.Dir(os.Args[0]))
-	page.Allow.Set(workingDir)
+	// page.Allow.Set(workingDir)
 	page.EnableLocalFileAccess.Set(true)
 	pdfg.AddPage(page)
 	// pdfg.AddPage(wkhtmltopdf.NewPageReader(f))
