@@ -37,14 +37,15 @@ func main() {
 	outputPath := "storage/example.pdf"
 
 	//html template data
-	templateData := struct {
+	type templateData struct{
 		Title       string
 		Description string
 		Company     string
 		Contact     string
 		Country     string
 		AddPath     string
-	}{
+	}
+	tmp :=templateData{
 		Title:       "HTML to PDF generator",
 		Description: "This is the simple HTML to PDF file.",
 		Company:     "Jhon Lewis",
@@ -52,8 +53,7 @@ func main() {
 		Country:     "Germany",
 		AddPath:     AddPath("qr.png"),
 	}
-
-	if err := r.ParseTemplate(templatePath, templateData); err == nil {
+	if err := r.ParseTemplate(templatePath, tmp); err == nil {
 		// ok, _ := r.GeneratePDF(outputPath)
 		// fmt.Println(ok, "pdf generated successfully")
 	} else {
