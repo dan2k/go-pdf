@@ -55,11 +55,7 @@
 </table>
 <p class="new-page">Page 2, paragraph 1</p>
 <div class="reportGraph"><canvas id="canvas"></canvas></div>
-<div>[
-    {{range .Labels}}
-            {{.}},
-    {{end}}
-    ]</div>
+<div id="arr"></div>
 
 <script type="text/javascript">
     'use strict';
@@ -79,6 +75,9 @@
         };
     };
     const ctx = document.getElementById('canvas');
+    const arr = document.getElementById('arr');
+    const labels ={{ .Labels }};
+    arr.innerHTML(lables);
     const myChart = new Chart(ctx, {
         type: 'bar',
         data: {
