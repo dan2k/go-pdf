@@ -3,7 +3,7 @@ package pdfGenerator
 import (
 	"bytes"
 	// "fmt"
-	"path/filepath"
+	// "path/filepath"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -76,7 +76,7 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	}
 	// fmt.Println(workingDir)
 	
-	page.Allow.Set(filepath.Dir(os.Args[0]))
+	// page.Allow.Set(filepath.Dir(os.Args[0]))
 	page.EnableLocalFileAccess.Set(true)
 	pdfg.AddPage(page)
 	// pdfg.AddPage(wkhtmltopdf.NewPageReader(f))
