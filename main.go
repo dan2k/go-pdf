@@ -2,40 +2,34 @@ package main
 
 import (
 	"fmt"
+	log "go-pdf/log"
 	u "go-pdf/pdfGenerator"
-	"log"
-	"os"
 	"time"
-
-	"path/filepath"
-
 	"github.com/schollz/progressbar/v3"
 	qrcode "github.com/skip2/go-qrcode"
 	"github.com/xuri/excelize/v2"
-)
-
-var (
-	outfile, _ = os.Create("my.log") // update path for your needs
-	l          = log.New(outfile, "", 0)
 )
 
 const (
 	DDMMYYYYhhmmss = "2006-01-02 15:04:05"
 )
 
+var envs map[string]string
+
 func main() {
-	
-	err := qrcode.WriteFile("https://example.org", qrcode.Medium, 256, "templates/qr.png")
+	log.New()
+	envs :=log.Envs
+	l :=log.L
+	err := qrcode.WriteFile("https://example.org", qrcode.Medium, 256, envs["QRCODE"])
 	if err != nil {
 		fmt.Println(err)
 	}
-	r := u.NewRequestPdf("")
+	r := u.NewRequestPdf("",l,envs)
 
 	//html template path
-	templatePath := "templates/sample2.html"
-
+	templatePath := envs["TEMPDIR"] + "/" + envs["TEMPFILE"]
 	//path for download pdf
-	outputPath := "storage/example.pdf"
+	outputPath := envs["STORAGE"] + "/" + envs["PDFFILE"]
 
 	//html template data
 	type templateData struct {
@@ -44,7 +38,7 @@ func main() {
 		Company     string
 		Contact     string
 		Country     string
-		AddPath     string
+		Labels      []string
 	}
 	tmp := templateData{
 		Title:       "HTML to PDF generator",
@@ -52,7 +46,8 @@ func main() {
 		Company:     "Jhon Lewis",
 		Contact:     "Maria Anders",
 		Country:     "Germany",
-		AddPath:     AddPath("qr.png"),
+		Labels: 	 []string{"Red", "Blue", "Yellow", "Green", "Purple", "Orange"},
+		
 	}
 	if err := r.ParseTemplate(templatePath, tmp); err == nil {
 		// ok, _ := r.GeneratePDF(outputPath)
@@ -62,7 +57,7 @@ func main() {
 	}
 
 	//######################################################
-	var xlsFile = "test.xlsx"
+	var xlsFile = envs["EXCELFILE"]
 	fmt.Printf("Open %s \n", xlsFile)
 	l.Printf("%s Open %s \n", time.Now().UTC().Format(DDMMYYYYhhmmss), xlsFile)
 	f, err := excelize.OpenFile(xlsFile)
@@ -119,7 +114,3 @@ func main() {
 	l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), "complete !")
 
 }
-func AddPath(f string) string {
-	return fmt.Sprintf("file:///%s/%s", filepath.Dir(os.Args[0]), f)
-}
-

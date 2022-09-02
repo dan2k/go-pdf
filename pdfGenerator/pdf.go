@@ -2,17 +2,12 @@ package pdfGenerator
 
 import (
 	"bytes"
-	// "fmt"
-	// "fmt"
-	// "path/filepath"
-	// "strings"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
 	"time"
-
 	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
 )
 
@@ -20,9 +15,12 @@ import (
 type RequestPdf struct {
 	body string
 }
-
+var l *log.Logger
+var envs map[string]string 
 //new request to pdf function
-func NewRequestPdf(body string) *RequestPdf {
+func NewRequestPdf(body string,ll *log.Logger,e map[string]string) *RequestPdf {
+	l=ll
+	envs=e 
 	return &RequestPdf{
 		body: body,
 	}
@@ -45,9 +43,15 @@ func (r *RequestPdf) ParseTemplate(templateFileName string, data interface{}) er
 
 //generate pdf function
 func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
+	/*var envs map[string]string
+	envs, err := godotenv.Read(".env")
+	if err != nil {
+        l.Fatal("Error loading .env file")
+    }
+	*/
 	t := time.Now().Unix()
 	// write whole the body
-	file:="templates/" + strconv.FormatInt(int64(t), 10) + ".html";
+	file:=envs["TEMPDIR"]+"/" + strconv.FormatInt(int64(t), 10) + ".html";
 	
 	err1 := ioutil.WriteFile(file, []byte(r.body), 0644)
 	if err1 != nil {
@@ -55,14 +59,12 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	}
 	
 	if _, err := os.Stat(file); os.IsNotExist(err) {
-		log.Fatal(err)
+		l.Fatal(err)
 	}
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
 	if err != nil {
-		log.Fatal(err)
+		l.Fatal(err)
 	}
-	// page := wkhtmltopdf.NewPageReader(f)
-	
 	page :=wkhtmltopdf.NewPage(file)
 	workingDir, err := os.Getwd()
 	if err != nil {
@@ -72,24 +74,19 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	page.EnableLocalFileAccess.Set(true)
 	pdfg.AddPage(page)
 	pdfg.PageSize.Set(wkhtmltopdf.PageSizeA4)
-
 	pdfg.Dpi.Set(300)
-
 	err = pdfg.Create()
 	if err != nil {
-		log.Fatal(err)
+		l.Fatal(err)
 	}
-
 	err = pdfg.WriteFile(pdfPath)
 	if err != nil {
-		log.Fatal(err)
+		l.Fatal(err)
 	}
-
 	dir, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
-
 	defer os.Remove(dir + "/"+file)
 	return true, nil
 }
