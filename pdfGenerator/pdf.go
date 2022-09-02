@@ -72,6 +72,9 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 		log.Fatal(err)
 	}
 	*/
+	if _, err := os.Stat(file); os.IsNotExist(err) {
+		log.Fatal(err)
+	}
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
 	if err != nil {
 		log.Fatal(err)
