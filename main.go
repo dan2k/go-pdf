@@ -1,4 +1,4 @@
-package main
+/*package main
 
 import (
 	"fmt"
@@ -121,4 +121,59 @@ func main() {
 }
 func AddPath(f string) string {
 	return fmt.Sprintf("file:///%s/%s", filepath.Dir(os.Args[0]), f)
+}
+*/
+
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+	"os"
+	"strings"
+
+	wkhtml "github.com/SebastiaanKlippert/go-wkhtmltopdf"
+)
+
+func main() {
+
+	pdfg, err := wkhtml.NewPDFGenerator()
+	if err != nil {
+		return
+	}
+	page := wkhtml.NewPageReader(strings.NewReader(getTagHTML()))
+	workingDir, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(workingDir)
+	page.Allow.Set(workingDir)
+	page.EnableLocalFileAccess.Set(true)
+	pdfg.AddPage(page)
+
+	// Create PDF document in internal buffer
+	err = pdfg.Create()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//Your Pdf Name
+	err = pdfg.WriteFile("./test.pdf")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Done")
+}
+
+func getTagHTML() string {
+	file, err := os.Open("test.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	b, err := ioutil.ReadAll(file)
+	return string(b)
 }
