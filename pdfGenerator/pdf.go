@@ -70,15 +70,16 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	page := wkhtmltopdf.NewPageReader(f)
-	// workingDir, err := os.Getwd()
+	// page := wkhtmltopdf.NewPageReader(f)
+	page :=wkhtmltopdf.NewPage("cloneTemplate/" + strconv.FormatInt(int64(t), 10) + ".html")
+	workingDir, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
 	// fmt.Println(workingDir)
 	
 	// page.Allow.Set(filepath.Dir(os.Args[0]))
-	// page.Allow.Set(workingDir)
+	page.Allow.Set(workingDir)
 	page.EnableLocalFileAccess.Set(true)
 	pdfg.AddPage(page)
 	// pdfg.AddPage(wkhtmltopdf.NewPageReader(f))

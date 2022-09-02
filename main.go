@@ -1,4 +1,4 @@
-/*package main
+package main
 
 import (
 	"fmt"
@@ -122,8 +122,8 @@ func main() {
 func AddPath(f string) string {
 	return fmt.Sprintf("file:///%s/%s", filepath.Dir(os.Args[0]), f)
 }
-*/
 
+/*
 package main
 
 import (
@@ -178,3 +178,4 @@ func getTagHTML() string {
 	b, err := ioutil.ReadAll(file)
 	return string(b)
 }
+*/
