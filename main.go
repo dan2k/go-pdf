@@ -120,5 +120,5 @@ func main() {
 
 }
 func AddPath(f string) string {
-	return fmt.Sprintf("file://%s/%s", filepath.Dir(os.Args[0]), f)
+	return fmt.Sprintf("file:///%s/%s", filepath.Dir(os.Args[0]), f)
 }
