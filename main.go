@@ -143,7 +143,7 @@ func main() {
 		return
 	}
 	// page := wkhtml.NewPageReader(strings.NewReader(getTagHTML()))
-	page := wkhtml.NewPage("test.html")
+	page := wkhtml.NewPage("templates/test.html")
 	workingDir, err := os.Getwd()
 	if err != nil {
 		panic(err)
