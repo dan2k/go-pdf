@@ -55,7 +55,11 @@
 </table>
 <p class="new-page">Page 2, paragraph 1</p>
 <div class="reportGraph"><canvas id="canvas"></canvas></div>
-<div>{{ .Labels }}</div>
+<div>[
+    {{range .Labels}}
+            {{.}},
+    {{end}}
+    ]</div>
 
 <script type="text/javascript">
     'use strict';
