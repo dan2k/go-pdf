@@ -8,7 +8,9 @@ import (
 	"time"
 
 	"github.com/schollz/progressbar/v3"
+	qrcode "github.com/skip2/go-qrcode"
 	"github.com/xuri/excelize/v2"
+	"path/filepath"
 )
 
 var (
@@ -22,6 +24,10 @@ const (
 
 func main() {
 
+	err := qrcode.WriteFile("https://example.org", qrcode.Medium, 256, "qr.png")
+	if err != nil {
+		fmt.Println(err)
+	}
 	r := u.NewRequestPdf("")
 
 	//html template path
@@ -37,12 +43,14 @@ func main() {
 		Company     string
 		Contact     string
 		Country     string
+		AddPath     string
 	}{
 		Title:       "HTML to PDF generator",
 		Description: "This is the simple HTML to PDF file.",
 		Company:     "Jhon Lewis",
 		Contact:     "Maria Anders",
 		Country:     "Germany",
+		AddPath:     AddPath("qr.png"),
 	}
 
 	if err := r.ParseTemplate(templatePath, templateData); err == nil {
@@ -52,24 +60,23 @@ func main() {
 		fmt.Println(err)
 	}
 
-	
 	//######################################################
 	var xlsFile = "test.xlsx"
 	fmt.Printf("Open %s \n", xlsFile)
-	l.Printf("%s Open %s \n",time.Now().UTC().Format(DDMMYYYYhhmmss),xlsFile)
+	l.Printf("%s Open %s \n", time.Now().UTC().Format(DDMMYYYYhhmmss), xlsFile)
 	f, err := excelize.OpenFile(xlsFile)
 	if err != nil {
 		fmt.Println(err)
-		l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss),err)
+		l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), err)
 		return
 	}
 	fmt.Println("Open file complete!")
-	l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss),"Open file complete!")
+	l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), "Open file complete!")
 	defer func() {
 		// Close the spreadsheet.
 		if err := f.Close(); err != nil {
 			fmt.Println(err)
-			l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss),err)
+			l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), err)
 		}
 	}()
 	// Get value from cell by given worksheet name and axis.
@@ -78,11 +85,11 @@ func main() {
 
 	if err != nil {
 		fmt.Println(err)
-		l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss),err)
+		l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), err)
 		return
 	}
 	fmt.Printf("Total %d rows \n", len(rows)-1)
-	l.Printf("%s Total %d rows \n",time.Now().UTC().Format(DDMMYYYYhhmmss), len(rows)-1)
+	l.Printf("%s Total %d rows \n", time.Now().UTC().Format(DDMMYYYYhhmmss), len(rows)-1)
 	bar := progressbar.NewOptions(
 		len(rows)-1,
 		progressbar.OptionEnableColorCodes(true),
@@ -108,6 +115,9 @@ func main() {
 	}
 
 	fmt.Println("complete !")
-	l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss),"complete !")
+	l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), "complete !")
 
 }
+func AddPath(f string) string {
+	return fmt.Sprintf("file://%s/%s", filepath.Dir(os.Args[0]), f)
+ }
