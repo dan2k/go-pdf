@@ -39,6 +39,7 @@ func main() {
 		Contact     string
 		Country     string
 		Labels      []string
+		Data        []int
 	}
 	tmp := templateData{
 		Title:       "HTML to PDF generator",
@@ -47,7 +48,7 @@ func main() {
 		Contact:     "Maria Anders",
 		Country:     "Germany",
 		Labels: 	 []string{"Red", "Blue", "Yellow", "Green", "Purple", "Orange"},
-		
+		Data:        []int{12, 19, 3, 5, 2, 3},
 	}
 	if err := r.ParseTemplate(templatePath, tmp); err == nil {
 		// ok, _ := r.GeneratePDF(outputPath)

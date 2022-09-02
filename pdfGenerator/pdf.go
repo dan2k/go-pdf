@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 	"time"
-	"fmt"
+	// "fmt"
 	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
 )
 
@@ -48,7 +48,7 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	t := time.Now().Unix()
 	// write whole the body
 	file:=envs["TEMPDIR"]+"/" + strconv.FormatInt(int64(t), 10) + ".html";
-	fmt.Println(r.body);
+	// fmt.Println(r.body);
 	err1 := ioutil.WriteFile(file, []byte(r.body), 0644)
 	if err1 != nil {
 		panic(err1)
