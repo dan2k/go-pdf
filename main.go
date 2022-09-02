@@ -23,14 +23,8 @@ const (
 )
 
 func main() {
-	ex, err := os.Executable()
-    if err != nil {
-        panic(err)
-    }
-    exPath := filepath.Dir(ex)
-    fmt.Println(exPath)
-
-	err = qrcode.WriteFile("https://example.org", qrcode.Medium, 256, "qr.png")
+	fmt.Println(filepath.Abs("./"))
+	err := qrcode.WriteFile("https://example.org", qrcode.Medium, 256, "qr.png")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -57,7 +51,7 @@ func main() {
 		Company:     "Jhon Lewis",
 		Contact:     "Maria Anders",
 		Country:     "Germany",
-		AddPath:     AddPath("qr.png"),
+		AddPath:     AddPath("img.jpg"),
 	}
 	if err := r.ParseTemplate(templatePath, tmp); err == nil {
 		// ok, _ := r.GeneratePDF(outputPath)
