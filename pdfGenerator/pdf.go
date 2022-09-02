@@ -47,15 +47,19 @@ func (r *RequestPdf) ParseTemplate(templateFileName string, data interface{}) er
 func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	t := time.Now().Unix()
 	// write whole the body
-
+	// file:="cloneTemplate/" + strconv.FormatInt(int64(t), 10) + ".html";
+	file:="templates/" + strconv.FormatInt(int64(t), 10) + ".html";
+	/*
 	if _, err := os.Stat("cloneTemplate/"); os.IsNotExist(err) {
 		errDir := os.Mkdir("cloneTemplate/", 0777)
 		if errDir != nil {
 			log.Fatal(errDir)
 		}
 	}
+	*/
 	// fmt.Println(r.body)
-	err1 := ioutil.WriteFile("cloneTemplate/"+strconv.FormatInt(int64(t), 10)+".html", []byte(r.body), 0644)
+	// err1 := ioutil.WriteFile("cloneTemplate/"+strconv.FormatInt(int64(t), 10)+".html", []byte(r.body), 0644)
+	err1 := ioutil.WriteFile(file, []byte(r.body), 0644)
 	if err1 != nil {
 		panic(err1)
 	}
@@ -73,7 +77,8 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 		log.Fatal(err)
 	}
 	// page := wkhtmltopdf.NewPageReader(f)
-	page :=wkhtmltopdf.NewPage("cloneTemplate/" + strconv.FormatInt(int64(t), 10) + ".html")
+	
+	page :=wkhtmltopdf.NewPage(file)
 	workingDir, err := os.Getwd()
 	if err != nil {
 		panic(err)
@@ -105,8 +110,8 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 		panic(err)
 	}
 
-	defer os.RemoveAll(dir + "/cloneTemplate")
-
+	// defer os.RemoveAll(dir + "/cloneTemplate")
+	defer os.Remove(dir + "/"+file)
 	return true, nil
 }
 
