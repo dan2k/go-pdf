@@ -2,7 +2,7 @@ package pdfGenerator
 
 import (
 	"bytes"
-	"fmt"
+	// "fmt"
 	// "fmt"
 	// "path/filepath"
 	// "strings"
@@ -54,12 +54,12 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 			log.Fatal(errDir)
 		}
 	}
-	fmt.Println(r.body)
+	// fmt.Println(r.body)
 	err1 := ioutil.WriteFile("cloneTemplate/"+strconv.FormatInt(int64(t), 10)+".html", []byte(r.body), 0644)
 	if err1 != nil {
 		panic(err1)
 	}
-
+	/*
 	f, err := os.Open("cloneTemplate/" + strconv.FormatInt(int64(t), 10) + ".html")
 	if f != nil {
 		defer f.Close()
@@ -67,7 +67,7 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	*/
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
 	if err != nil {
 		log.Fatal(err)
@@ -109,15 +109,4 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 
 	return true, nil
 }
-/*
-func getTagHTML() string {
-	file, err := os.Open("test.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
 
-	b, err := ioutil.ReadAll(file)
-	return string(b)
-}
-*/
