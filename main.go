@@ -25,7 +25,7 @@ const (
 
 func main() {
 	
-	err := qrcode.WriteFile("https://example.org", qrcode.Medium, 256, "qr.png")
+	err := qrcode.WriteFile("https://example.org", qrcode.Medium, 256, "templates/qr.png")
 	if err != nil {
 		fmt.Println(err)
 	}
