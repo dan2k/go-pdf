@@ -131,7 +131,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"strings"
+	// "strings"
 
 	wkhtml "github.com/SebastiaanKlippert/go-wkhtmltopdf"
 )
@@ -142,7 +142,8 @@ func main() {
 	if err != nil {
 		return
 	}
-	page := wkhtml.NewPageReader(strings.NewReader(getTagHTML()))
+	// page := wkhtml.NewPageReader(strings.NewReader(getTagHTML()))
+	page := wkhtml.NewPage("test.html")
 	workingDir, err := os.Getwd()
 	if err != nil {
 		panic(err)
