@@ -1,7 +1,7 @@
 FROM golang:1.18
 
 RUN apt-get update
-
+RUN apt install -y wkhtmltopdf
 
 ENV GO111MODULE on
 WORKDIR /var/www

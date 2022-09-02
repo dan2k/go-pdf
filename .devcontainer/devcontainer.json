@@ -27,6 +27,7 @@
 	"ms-vsliveshare.vsliveshare",
 	"vscode-icons-team.vscode-icons",
 	"visualstudioexptteam.vscodeintellicode",
-	"rangav.vscode-thunder-client"
+	"rangav.vscode-thunder-client",
+	"jinliming2.vscode-go-template"
 ]
 }
