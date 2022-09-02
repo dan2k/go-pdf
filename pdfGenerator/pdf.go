@@ -2,13 +2,16 @@ package pdfGenerator
 
 import (
 	"bytes"
-	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
+	// "fmt"
+	"path/filepath"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
 )
 
 //pdf requestpdf struct
@@ -62,17 +65,24 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 		log.Fatal(err)
 	}
 
-	
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
 	if err != nil {
 		log.Fatal(err)
 	}
-	pdfg.Cover.EnableLocalFileAccess.Set(true)
-	pdfg.Cover.Allow.Set("")
-	pdfg.AddPage(wkhtmltopdf.NewPageReader(f))
+	page := wkhtmltopdf.NewPageReader(f)
+	// workingDir, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	// fmt.Println(workingDir)
+	
+	page.Allow.Set(filepath.Dir(os.Args[0]))
+	page.EnableLocalFileAccess.Set(true)
+	pdfg.AddPage(page)
+	// pdfg.AddPage(wkhtmltopdf.NewPageReader(f))
 
 	pdfg.PageSize.Set(wkhtmltopdf.PageSizeA4)
-	
+
 	pdfg.Dpi.Set(300)
 
 	err = pdfg.Create()
@@ -86,7 +96,7 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	}
 
 	dir, err := os.Getwd()
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 
