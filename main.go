@@ -23,8 +23,14 @@ const (
 )
 
 func main() {
+	ex, err := os.Executable()
+    if err != nil {
+        panic(err)
+    }
+    exPath := filepath.Dir(ex)
+    fmt.Println(exPath)
 
-	err := qrcode.WriteFile("https://example.org", qrcode.Medium, 256, "qr.png")
+	err = qrcode.WriteFile("https://example.org", qrcode.Medium, 256, "qr.png")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -121,5 +127,5 @@ func main() {
 func AddPath(f string) string {
 	fmt.Printf("file://%s/%s \n", filepath.Dir(os.Args[0]), f)
 
-	return fmt.Sprintf("file://%s/%s", filepath.Dir(os.Args[0]), f)
+	return fmt.Sprintf("file:/%s/%s", filepath.Dir(os.Args[0]), f)
  }
