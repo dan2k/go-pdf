@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 	"time"
+	"fmt"
 	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
 )
 
@@ -43,16 +44,11 @@ func (r *RequestPdf) ParseTemplate(templateFileName string, data interface{}) er
 
 //generate pdf function
 func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
-	/*var envs map[string]string
-	envs, err := godotenv.Read(".env")
-	if err != nil {
-        l.Fatal("Error loading .env file")
-    }
-	*/
+	
 	t := time.Now().Unix()
 	// write whole the body
 	file:=envs["TEMPDIR"]+"/" + strconv.FormatInt(int64(t), 10) + ".html";
-	
+	fmt.Println(r.body);
 	err1 := ioutil.WriteFile(file, []byte(r.body), 0644)
 	if err1 != nil {
 		panic(err1)

@@ -55,7 +55,7 @@
 </table>
 <p class="new-page">Page 2, paragraph 1</p>
 <div class="reportGraph"><canvas id="canvas"></canvas></div>
-<div id="arr"></div>
+
 
 <script type="text/javascript">
     'use strict';
@@ -75,13 +75,14 @@
         };
     };
     const ctx = document.getElementById('canvas');
-    const arr = document.getElementById('arr');
-    const labels ={{ .Labels }};
-    arr.innerHTML(lables);
+    
+    // const labels ={{ .Labels }};
+    
     const myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            labels: {{ .Labels }},
             datasets: [{
                 label: '# of Votes',
                 data: [12, 19, 3, 5, 2, 3],
