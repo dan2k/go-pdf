@@ -7,10 +7,11 @@ import (
 	"os"
 	"time"
 
+	"path/filepath"
+
 	"github.com/schollz/progressbar/v3"
 	qrcode "github.com/skip2/go-qrcode"
 	"github.com/xuri/excelize/v2"
-	"path/filepath"
 )
 
 var (
@@ -37,7 +38,7 @@ func main() {
 	outputPath := "storage/example.pdf"
 
 	//html template data
-	type templateData struct{
+	type templateData struct {
 		Title       string
 		Description string
 		Company     string
@@ -45,7 +46,7 @@ func main() {
 		Country     string
 		AddPath     string
 	}
-	tmp :=templateData{
+	tmp := templateData{
 		Title:       "HTML to PDF generator",
 		Description: "This is the simple HTML to PDF file.",
 		Company:     "Jhon Lewis",
@@ -121,5 +122,5 @@ func main() {
 func AddPath(f string) string {
 	fmt.Printf("file://%s/%s \n", filepath.Dir(os.Args[0]), f)
 
-	return fmt.Sprintf("file:/%s/%s", filepath.Dir(os.Args[0]), f)
- }
+	return fmt.Sprintf("file:///%s/%s", filepath.Dir(os.Args[0]), f)
+}

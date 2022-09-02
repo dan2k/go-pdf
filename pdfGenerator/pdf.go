@@ -62,7 +62,7 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 		log.Fatal(err)
 	}
 
-	// wkhtmltopdf.SetPath("/workspaces/go-pdf")
+	
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
 	if err != nil {
 		log.Fatal(err)
