@@ -47,31 +47,13 @@ func (r *RequestPdf) ParseTemplate(templateFileName string, data interface{}) er
 func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	t := time.Now().Unix()
 	// write whole the body
-	// file:="cloneTemplate/" + strconv.FormatInt(int64(t), 10) + ".html";
 	file:="templates/" + strconv.FormatInt(int64(t), 10) + ".html";
-	/*
-	if _, err := os.Stat("cloneTemplate/"); os.IsNotExist(err) {
-		errDir := os.Mkdir("cloneTemplate/", 0777)
-		if errDir != nil {
-			log.Fatal(errDir)
-		}
-	}
-	*/
-	// fmt.Println(r.body)
-	// err1 := ioutil.WriteFile("cloneTemplate/"+strconv.FormatInt(int64(t), 10)+".html", []byte(r.body), 0644)
+	
 	err1 := ioutil.WriteFile(file, []byte(r.body), 0644)
 	if err1 != nil {
 		panic(err1)
 	}
-	/*
-	f, err := os.Open("cloneTemplate/" + strconv.FormatInt(int64(t), 10) + ".html")
-	if f != nil {
-		defer f.Close()
-	}
-	if err != nil {
-		log.Fatal(err)
-	}
-	*/
+	
 	if _, err := os.Stat(file); os.IsNotExist(err) {
 		log.Fatal(err)
 	}
@@ -86,14 +68,9 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	if err != nil {
 		panic(err)
 	}
-	// fmt.Println(workingDir)
-	
-	// page.Allow.Set(filepath.Dir(os.Args[0]))
 	page.Allow.Set(workingDir)
 	page.EnableLocalFileAccess.Set(true)
 	pdfg.AddPage(page)
-	// pdfg.AddPage(wkhtmltopdf.NewPageReader(f))
-
 	pdfg.PageSize.Set(wkhtmltopdf.PageSizeA4)
 
 	pdfg.Dpi.Set(300)
@@ -113,7 +90,6 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 		panic(err)
 	}
 
-	// defer os.RemoveAll(dir + "/cloneTemplate")
 	defer os.Remove(dir + "/"+file)
 	return true, nil
 }
