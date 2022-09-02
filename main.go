@@ -55,6 +55,7 @@ func main() {
 		// fmt.Println(ok, "pdf generated successfully")
 	} else {
 		fmt.Println(err)
+		l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), err)
 	}
 
 	//######################################################
