@@ -128,7 +128,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	// "strings"
@@ -148,7 +147,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(workingDir)
+	// fmt.Println(workingDir)
 	page.Allow.Set(workingDir)
 	page.EnableLocalFileAccess.Set(true)
 	pdfg.AddPage(page)
@@ -168,13 +167,3 @@ func main() {
 	fmt.Println("Done")
 }
 
-func getTagHTML() string {
-	file, err := os.Open("test.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	b, err := ioutil.ReadAll(file)
-	return string(b)
-}
