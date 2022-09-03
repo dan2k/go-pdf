@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"flag"
 	log "go-pdf/log"
 	u "go-pdf/pdfGenerator"
 	"time"
@@ -17,6 +18,15 @@ const (
 var envs map[string]string
 
 func main() {
+	var startRow,endRow int 
+	// endRow :=flag.Int("end",0,"an int ")
+	// startRow := flag.Int("start", 0, "an int")
+	// fmt.Println(*startRow,*endRow);
+	flag.IntVar(&startRow, "start", 0, "a string var")
+	flag.IntVar(&endRow, "end", 0, "a string var")
+	flag.Parse()
+
+	fmt.Println(startRow,endRow);
 	log.New()
 	envs :=log.Envs
 	l :=log.L

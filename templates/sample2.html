@@ -1,28 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Example Pdf</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <style>
         h3{
             text-align: center;
         }
-        table {
+        .tb1 table {
             font-family: arial, sans-serif;
             border-collapse: collapse;
             width: 100%;
         }
 
-        td, th {
-            border: 1px solid #dddddd;
-            text-align: left;
+        .tb1 td {
+            border: 1px solid #a0fad6;
+            text-align: center;
             padding: 8px;
         }
-
-        tr:nth-child(even) {
-            background-color: #dddddd;
+		.tb1 th{
+			border: 1px solid #88fcce;
+			background-color:#a0fad6;
+			text-align: center;
+            padding: 5px;
+		}
+		
+		.tb2 table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
         }
-        .reportGraph {width:900px}
+        
+        .tb2 td {
+            
+            padding: 2px;
+        }
+		/*
+        .tb1 th{
+			border: 1px solid #88fcce;
+			background-color:#a0fad6;
+			text-align: center;
+            padding: 8px;
+		}
+		*/
+        
+
+        .reportGraph {
+            width: 900px
+        }
+
         @media print {
             .new-page {
                 page-break-before: always;
@@ -34,119 +63,230 @@
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script> -->
     <script src="js/chart.min.js"></script>
 </head>
+
 <body>
-<h3>{{ .Title }}</h3>
-<p>{{.Description}}</p>
-<p>ทดสอบ</p>
-<hr/>
-<div><img src="qr.png" /></div>
-<!-- <div><img src="img/Logo-IPST.png" /></div> -->
-<table>
-    <thead>
-    <tr>
-        <th>Company</th>
-        <th>Contact</th>
-        <th>Country</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>{{.Company}}</td>
-        <td>{{.Contact}}</td>
-        <td>{{.Country}}</td>
-    </tr>
-    </tbody>
-</table>
-<p class="new-page">Page 2, paragraph 1</p>
-<div class="reportGraph"><canvas id="canvas"></canvas></div>
+    <div class="card border border-warning">
+        <div class="card-header bg-warning bg-opacity-25 text-black">
+            3.ผลการทดสอบจำแนกตามตัวชี้วัดอัจฉริยะลักษณะทางคณิตศาสตร์ ตามแนวทาง สสวท.
+        </div>
+        <div class="card-body">
+            <table class="tb1">
+                <thead >
+                    <tr>
+                        <th width="20%" >ตัวชี้วัด</th>
+                        <th width="20%" >จำนวนข้อทั้งหมด</th>
+                        <th width="20%" >จำนวนข้อที่ตอบถูก</th>
+                        <th width="20%" >ร้อยละข้อที่ตอบถูก</th>
+                        <th width="20%" >ค่าเฉลี่ยของร้อยละข้อที่ตอบถูกของผู้เข้าสอบทั้งหมด</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>S1</td>
+                        <td>5</td>
+                        <td>5</td>
+                        <td>100</td>
+                        <td>17</td>
+                    </tr>
+                    <tr>
+                        <td>S2</td>
+                        <td>4</td>
+                        <td>3</td>
+                        <td>75</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td>S3</td>
+                        <td>5</td>
+                        <td>5</td>
+                        <td>100</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td>A1</td>
+                        <td>2</td>
+                        <td>2</td>
+                        <td>100</td>
+                        <td>22</td>
+                    </tr>
+                    <tr>
+                        <td>A2</td>
+                        <td>5</td>
+                        <td>5</td>
+                        <td>100</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>A3</td>
+                        <td>4</td>
+                        <td>4</td>
+                        <td>100</td>
+                        <td>20</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="border border-info mx-auto my-2 reportGraph"><canvas id="canvas" class=""></canvas></div>
+            <table class="tb2 table table-borderless">
+                <tbody>
+                    <tr>
+                        <td colspan="2">ตัวชี้วัดอัจฉริยะลักษณะทางคณิตศาสตร์ ตามแนวทาง สสวท.</td>
+                        
+                    </tr>
+                    <tr>
+                        <td>S1 คือ</td>
+                        <td>ทักษะการแก้ปัญหา (ข้อ 2,7,9,23 และ 25)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>เป็นความสามารถในการทำความเข้าใจปัญหา คิดวิเคราะห์ วางแผน แก้ปัญหา และเลือกใช้วิธีการที่เหมาะสม โดยคำนึงถึง</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>ความสมเหตุสมผลของคำตอบ พร้อมทั้งตรวจสอบความถูกต้องของคำตอบ เช่น คิดย้อนกลับได้</td>
+                    </tr>
+                    <tr>
+                        <td>S2 คือ</td>
+                        <td> ทักษะการให้เหตุผล (ข้อ 3, 11, 21 และ 24)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>เป็นความสามารถในการให้เหตุผล เพื่อนำไปสู่การสรุป โดยมีข้อเท็จจริงทางคณิตศาสตร์รองรับ</td>
+                    </tr>
+                    <tr>
+                        <td>S3 คือ</td>
+                        <td>ทักษะการเชื่อมโยงและประยุกต์ใช้ (ข้อ 14, 15, 16, 17 และ 18)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>เป็นความสำมารถในการใช้ความรู้ทางคณิตศาสตร์เป็นเครื่องมือในการเรียนรู้คณิตศาสตร์เนื้อหาต่าง ๆ หรือศาสตร์อื่น ๆ</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>และนำไปใช้ในชีวิตจริง เช่น เข้าใจเนื้อหาใหมได้เร็วและมองเห็นมิติสัมพันธ์</td>
+                    </tr>
+                    <tr>
+                        <td>A1 คือ</td>
+                        <td>พฤติกรรมความสนใจ (ข้อ 10 และ 13)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>เป็นพฤติกรรมที่บ่งบอกถึงความสนใจทางคณิศาสตร์ เช่น แสดงความเข้าใจเนื้อหาคณิตศาสตร์และอธิบายได้</td>
+                    </tr>
+                    <tr>
+                        <td>A2 คือ</td>
+                        <td>พฤติกรรมการนำไปใช้ (ข้อ 4, 5, 6, 8 และ 19)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>เป็นพฤติกรรมที่บ่งบอกถึงความสนใจทางคณิตศาสตร์และสามารถนำไปประยุกต์ใช้ได้</td>
+                    </tr>
+                    <tr>
+                        <td>A3 คือ</td>
+                        <td>พฤติกรรมการสร้างองค์ความรู้ (ข้อ 1, 12, 20 และ 22)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>เป็นพฤติกรรมที่บ่งบอกความสามารถในการนำข้อมูลที่มีมาสร้างสรรค์ให้เกิดเป็นองค์ความรู้ใหม่</td>
+                    </tr>
+                </tbody>
+              </table>
+        </div>
+    </div>
+	<!--
+	<p class="new-page">Page 2, paragraph 1</p>
+	<div class="reportGraph"><canvas id="canvas"></canvas></div>
+	-->
 
+    
+    <script type="text/javascript">
+        'use strict';
+        (function (setLineDash) {
+            CanvasRenderingContext2D.prototype.setLineDash = function () {
+                if (!arguments[0].length) {
+                    arguments[0] = [1, 0];
+                }
+                // Now, call the original method
+                return setLineDash.apply(this, arguments);
+            };
+        })(CanvasRenderingContext2D.prototype.setLineDash);
+        Function.prototype.bind = Function.prototype.bind || function (thisp) {
+            var fn = this;
+            return function () {
+                return fn.apply(thisp, arguments);
+            };
+        };
+        const ctx = document.getElementById('canvas');
+        const options = {
+            scale: {
 
-<script type="text/javascript">
-    'use strict';
-    (function(setLineDash) {
-        CanvasRenderingContext2D.prototype.setLineDash = function() {
-            if(!arguments[0].length){
-                arguments[0] = [1,0];
-            }
-            // Now, call the original method
-            return setLineDash.apply(this, arguments);
-        };
-    })(CanvasRenderingContext2D.prototype.setLineDash);
-    Function.prototype.bind = Function.prototype.bind || function (thisp) {
-        var fn = this;
-        return function () {
-            return fn.apply(thisp, arguments);
-        };
-    };
-    const ctx = document.getElementById('canvas');
-    const options = {
-        scale: {
-            
-            display: true,
-			 ticks: {
-				suggestedMin: 20,
-				suggestedMax: 100,
-				stepSize: 20,
-			}
-        } ,
-		legend: {
-            labels: {
-                // This more specific font property overrides the global property
-                fontColor: 'black',
-				boxWidth:15,
-				generateLabels: (chart) => {
-					const datasets = chart.data.datasets;
-					const labels=datasets.map((data,i)=>{ return {label:data.label,bgcolor:data.borderColor}});
-					return labels.map((data, i) => ({
-					  text: `${data.label}`,
-					  fillStyle: data.bgcolor,
-					}))
-				},
-				
+                display: true,
+                ticks: {
+                    suggestedMin: 20,
+                    suggestedMax: 100,
+                    stepSize: 20,
+                }
             },
-			position: "right",
-            align: "middle"
-			//display: false,
-			
-        },
-		title:{
-			display:true,
-			position:'top',
-			text:'ร้อยละของข้อที่ตอบถูกจำแนกตามตัวชี้วัดอัจฉริยะลักษณะทางคณิตศาสตร์',
-		},
-		
-		
-		
-    };
-    const data= {
-        labels: ['S2', 'S3', 'A1', 'A2','A3','S1'],
-        datasets: [
-			{
-				data: [70, 50, 40, 80,77,75],
-				fill:false,
-				borderColor: 'blue',
-				label:'ร้อยละข้อที่ตอบถูก',
-				//backgroundColor:'rgba(245, 40, 145, 0.8)',
-				borderWidth:1,
-			},
-			{
-				data: [80, 80, 80, 80,80,80],
-				fill:false,
-				label:'ค่าเฉลี่ยของร้อยละข้อที่ตอบถูกของผู้เข้าสอบทั้งหมด',
-				borderWidth:1,
-				borderColor: 'orange',
-				borderDash:[1],
-				borderDashOffset:0.2,
-				
-			},
-		]
-    }
-    var myRadarChart = new Chart(ctx, {
-        type: 'radar',
-        data: data,
-        options: options
-    });
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    fontColor: 'black',
+                    fontSize: 16,
+                    boxWidth: 15,
+                    generateLabels: (chart) => {
+                        const datasets = chart.data.datasets;
+                        const labels = datasets.map((data, i) => { return { label: data.label, bgcolor: data.borderColor } });
+                        return labels.map((data, i) => ({
+                            text: `${data.label}`,
+                            fillStyle: data.bgcolor,
+                        }))
+                    },
 
-</script>
+                },
+                position: "right",
+                align: "middle"
+                //display: false,
+
+            },
+            title: {
+                display: true,
+                position: 'top',
+                text: 'ร้อยละของข้อที่ตอบถูกจำแนกตามตัวชี้วัดอัจฉริยะลักษณะทางคณิตศาสตร์',
+                fontSize: 16,
+            },
+
+
+
+        };
+        const data = {
+            labels: ['S2', 'S3', 'A1', 'A2', 'A3', 'S1'],
+            datasets: [
+                {
+                    data: [75, 100, 100, 100, 100, 100],
+                    fill: false,
+                    borderColor: 'blue',
+                    label: 'ร้อยละข้อที่ตอบถูก',
+                    //backgroundColor:'rgba(245, 40, 145, 0.8)',
+                    borderWidth: 1.01,
+                },
+                {
+                    data: [8, 9, 17, 22, 10, 20],
+                    fill: false,
+                    label: 'ค่าเฉลี่ยของร้อยละข้อที่ตอบถูกของผู้เข้าสอบทั้งหมด',
+                    borderWidth: 1,
+                    borderColor: 'orange',
+                    borderDash: [1],
+                    borderDashOffset: 0.2,
+
+                },
+            ]
+        }
+        var myRadarChart = new Chart(ctx, {
+            type: 'radar',
+            data: data,
+            options: options
+        });
+
+    </script>
 </body>
+
 </html>
