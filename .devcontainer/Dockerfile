@@ -1,6 +1,8 @@
 FROM golang:1.18
 
 RUN apt-get update
+RUN apt install -y libthai0
+RUN apt install -y xfonts-thai
 RUN apt install -y wkhtmltopdf
 
 ENV GO111MODULE on

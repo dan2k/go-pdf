@@ -30,13 +30,17 @@
         }
     </style>
     <!--<script src="https://cdnjs.com/libraries/Chart.js"></script>-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script> -->
+    <script src="js/chart.min.js"></script>
 </head>
 <body>
 <h3>{{ .Title }}</h3>
 <p>{{.Description}}</p>
+<p>ทดสอบ</p>
 <hr/>
 <div><img src="qr.png" /></div>
+<!-- <div><img src="img/Logo-IPST.png" /></div> -->
 <table>
     <thead>
     <tr>
@@ -75,45 +79,74 @@
         };
     };
     const ctx = document.getElementById('canvas');
-    
-    // const labels ={{ .Labels }};
-    
-    const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            labels: {{ .Labels }},
-            datasets: [{
-                label: '# of Votes',
-                // data: [12, 19, 3, 5, 2, 3],
-                data: {{ .Data }},
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
+    const options = {
+        scale: {
+            
+            display: true,
+			 ticks: {
+				suggestedMin: 20,
+				suggestedMax: 100,
+				stepSize: 20,
+			}
+        } ,
+		legend: {
+            labels: {
+                // This more specific font property overrides the global property
+                fontColor: 'black',
+				boxWidth:15,
+				generateLabels: (chart) => {
+					const datasets = chart.data.datasets;
+					const labels=datasets.map((data,i)=>{ return {label:data.label,bgcolor:data.borderColor}});
+					return labels.map((data, i) => ({
+					  text: `${data.label}`,
+					  fillStyle: data.bgcolor,
+					}))
+				},
+				
+            },
+			position: "right",
+            align: "middle"
+			//display: false,
+			
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
+		title:{
+			display:true,
+			position:'top',
+			text:'ร้อยละของข้อที่ตอบถูกจำแนกตามตัวชี้วัดอัจฉริยะลักษณะทางคณิตศาสตร์',
+		},
+		
+		
+		
+    };
+    const data= {
+        labels: ['S2', 'S3', 'A1', 'A2','A3','S1'],
+        datasets: [
+			{
+				data: [70, 50, 40, 80,77,75],
+				fill:false,
+				borderColor: 'blue',
+				label:'ร้อยละข้อที่ตอบถูก',
+				//backgroundColor:'rgba(245, 40, 145, 0.8)',
+				borderWidth:1,
+			},
+			{
+				data: [80, 80, 80, 80,80,80],
+				fill:false,
+				label:'ค่าเฉลี่ยของร้อยละข้อที่ตอบถูกของผู้เข้าสอบทั้งหมด',
+				borderWidth:1,
+				borderColor: 'orange',
+				borderDash:[1],
+				borderDashOffset:0.2,
+				
+			},
+		]
+    }
+    var myRadarChart = new Chart(ctx, {
+        type: 'radar',
+        data: data,
+        options: options
     });
+
 </script>
 </body>
 </html>
