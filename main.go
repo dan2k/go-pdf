@@ -113,6 +113,11 @@ func main() {
 			BarStart:      "[",
 			BarEnd:        "]",
 		}),
+		progressbar.OptionOnCompletion(func(){
+			fmt.Println("")
+			fmt.Println("complete !")
+			l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), "complete !")
+		}),
 	)
 	for i := 1; i < len(rows); i++ {
 		r.GeneratePDF(outputPath)
@@ -121,8 +126,8 @@ func main() {
 
 		// time.Sleep(1000 * time.Millisecond)
 	}
+	
 
-	fmt.Println("complete !")
-	l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), "complete !")
+	
 
 }
