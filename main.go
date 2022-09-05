@@ -31,8 +31,15 @@ func main() {
 	flag.IntVar(&startRow, "start", 0, "a string var")
 	flag.IntVar(&endRow, "end", 0, "a string var")
 	flag.Parse()
-
-	fmt.Println(startRow,endRow);
+	if endRow <startRow {
+		fmt.Println("start < end ")	
+		return
+	}
+	if startRow <0 {
+		fmt.Println("start < 0 ")	
+		return
+	}
+	//fmt.Println(startRow,endRow);
 	log.New(runtime)
 	envs :=log.Envs
 	l :=log.L
@@ -84,8 +91,18 @@ func main() {
 	}
 	fmt.Printf("Total %d rows \n", len(rows)-1)
 	l.Printf("%s Total %d rows \n", time.Now().UTC().Format(DDMMYYYYhhmmss), len(rows)-1)
+	
+	if err := os.Mkdir(outputPath+"/"+runtime, os.ModePerm); err != nil {
+		l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), err)
+        l.Fatal(err)
+    }
+	if endRow >(len(rows)-1) {
+		fmt.Println("end > ",len(rows)-1)	
+		return
+	}
+	useRows :=rows[startRow:endRow+1]
 	bar := progressbar.NewOptions(
-		len(rows)-1,
+		len(useRows),
 		progressbar.OptionEnableColorCodes(true),
 		progressbar.OptionSetPredictTime(true),
 		progressbar.OptionShowElapsedTimeOnFinish(),
@@ -105,13 +122,9 @@ func main() {
 			l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), "complete !")
 		}),
 	)
-	if err := os.Mkdir(outputPath+"/"+runtime, os.ModePerm); err != nil {
-		l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), err)
-        l.Fatal(err)
-    }
 	qrfile :=envs["QRCODE"]+"/qr-"+runtime+".png"
-	for i := 1; i < len(rows); i++ {
-		pid:=rows[i][0]
+	for i := 0; i < len(useRows); i++ {
+		pid:=useRows[i][0]
 		t:=strings.Split(qrfile, "/")
 		t2:=strings.Join(t[1:int(len(t))],"/")
 		err := qrcode.WriteFile(pid, qrcode.Medium, 256, qrfile)
