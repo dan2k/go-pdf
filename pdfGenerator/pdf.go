@@ -72,6 +72,8 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	pdfg.AddPage(page)
 	pdfg.PageSize.Set(wkhtmltopdf.PageSizeA4)
 	pdfg.Dpi.Set(300)
+	//pdfg.MarginLeft.Set(100)
+	// pdfg.MarginRight.Set(100)
 	err = pdfg.Create()
 	if err != nil {
 		l.Fatal(err)
