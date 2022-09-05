@@ -129,7 +129,7 @@
                             <div class="col-12">ชื่อ - นามสกุล</div>
                         </div>
                         <div class="row">
-                            <div class="col-6">เลขประจำตัวประชาชน</div>
+                            <div class="col-6">เลขประจำตัวประชาชน {{ .Pid }}</div>
                             <div class="col-6">เลขประจำตัวผู้เข้าสอบ</div>
                         </div>
                         <div class="row">
@@ -144,7 +144,7 @@
 
             </div>
             <div class="col-2">
-                <img src="qr.png" class="w-75 img-thumbnail float-end border border-0">
+                <img src="{{ .Qrcode }}" class="w-75 img-thumbnail float-end border border-0">
                 <img src="img/m.png" class="w-75 img-thumbnail float-end border border-0">
             </div>
         </div>
