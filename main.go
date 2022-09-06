@@ -1,16 +1,10 @@
 package main
-
 import (
-	"flag"
 	"fmt"
-	log "go-pdf/log"
 	u "go-pdf/pdfGenerator"
 	"os"
 	"strings"
 	"time"
-
-	"github.com/schollz/progressbar/v3"
-	qrcode "github.com/skip2/go-qrcode"
 	"github.com/xuri/excelize/v2"
 )
 
@@ -19,54 +13,23 @@ const (
 	DDMMYYYYhhmmss2 = "20060102-15:04:05"
 )
 
-var envs map[string]string
 var runtime =time.Now().UTC().Format(DDMMYYYYhhmmss2)
 func main() {
 	
-	var startRow,endRow int 
-
-	// endRow :=flag.Int("end",0,"an int ")
-	// startRow := flag.Int("start", 0, "an int")
-	// fmt.Println(*startRow,*endRow);
-	flag.IntVar(&startRow, "start", 0, "a string var")
-	flag.IntVar(&endRow, "end", 0, "a string var")
-	flag.Parse()
-	if endRow <startRow {
-		fmt.Println("start < end ")	
-		return
-	}
-	if startRow <0 {
-		fmt.Println("start < 0 ")	
-		return
-	}
-	//fmt.Println(startRow,endRow);
-	log.New(runtime)
-	envs :=log.Envs
-	l :=log.L
-	
+	CallClear() 
+	InitLog()
+	InitFlag()
 	r := u.NewRequestPdf("",l,envs)
-
 	//html template path
 	templatePath := envs["TEMPDIR"] + "/" + envs["TEMPFILE"]
+	//#####################################################
 	//path for download pdf
-	outputPath := envs["STORAGE"] 
-
-	//html template data
-	type templateData struct {
-		Title       string
-		Description string
-		Company     string
-		Contact     string
-		Country     string
-		Labels      []string
-		Data        []int
-		Qrcode      string 
-		Pid         string
+	if _, err := os.Stat(envs["STORAGE"]); err !=nil {
+		if err := os.MkdirAll(envs["STORAGE"], os.ModePerm); err != nil {
+			l.Fatal(err)
+		}
 	}
-	
-
-	
-
+	outputPath := envs["STORAGE"]
 	//######################################################
 	var xlsFile = envs["EXCELFILE"]
 	fmt.Printf("Open %s \n", xlsFile)
@@ -79,56 +42,34 @@ func main() {
 	}
 	fmt.Println("Open file complete!")
 	l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), "Open file complete!")
-	
 	// Get value from cell by given worksheet name and axis.
-
 	rows, err := f.GetRows("Sheet1")
-
 	if err != nil {
 		fmt.Println(err)
 		l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), err)
 		return
 	}
-	fmt.Printf("Total %d rows \n", len(rows)-1)
-	l.Printf("%s Total %d rows \n", time.Now().UTC().Format(DDMMYYYYhhmmss), len(rows)-1)
-	
 	if err := os.Mkdir(outputPath+"/"+runtime, os.ModePerm); err != nil {
 		l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), err)
         l.Fatal(err)
     }
-	if endRow >(len(rows)-1) {
+	if EndRow >(len(rows)-1) {
 		fmt.Println("end > ",len(rows)-1)	
 		return
 	}
-	useRows :=rows[startRow:endRow+1]
-	bar := progressbar.NewOptions(
-		len(useRows),
-		progressbar.OptionEnableColorCodes(true),
-		progressbar.OptionSetPredictTime(true),
-		progressbar.OptionShowElapsedTimeOnFinish(),
-		progressbar.OptionShowCount(),
-		progressbar.OptionFullWidth(),
-		progressbar.OptionSetDescription("กำลังประมวลผล..."),
-		progressbar.OptionSetTheme(progressbar.Theme{
-			Saucer:        "[green]▓[reset]",
-			SaucerHead:    "[green]▶[reset]",
-			SaucerPadding: " ",
-			BarStart:      "[",
-			BarEnd:        "]",
-		}),
-		progressbar.OptionOnCompletion(func(){
-			fmt.Println("")
-			fmt.Println("complete !")
-			l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), "complete !")
-		}),
-	)
+	useRows :=rows[StartRow:EndRow+1]
+	fmt.Printf("Start generate from %s(%d) to %s(%d) \n",useRows[0][0],StartRow,useRows[len(useRows)-1][0],EndRow)
+	l.Printf("%s Start generate from %s(%d) to %s(%d) \n",time.Now().UTC().Format(DDMMYYYYhhmmss),useRows[0][0],StartRow,useRows[len(useRows)-1][0],EndRow)
+	fmt.Printf("Totals %d records \n",len(useRows))
+	l.Printf("%s Totals %d records \n",time.Now().UTC().Format(DDMMYYYYhhmmss),len(useRows))
+
+	bar:=InitBar(len(useRows))
 	qrfile :=envs["QRCODE"]+"/qr-"+runtime+".png"
 	for i := 0; i < len(useRows); i++ {
 		pid:=useRows[i][0]
 		t:=strings.Split(qrfile, "/")
 		t2:=strings.Join(t[1:int(len(t))],"/")
-		err := qrcode.WriteFile(pid, qrcode.Medium, 256, qrfile)
-		if err != nil {
+		if err :=GenQr(pid,qrfile);err != nil {
 			fmt.Println(err)
 		}
 		tmp := templateData{
@@ -166,7 +107,4 @@ func main() {
 		}
 
 	}()
-
-	
-
 }

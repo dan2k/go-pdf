@@ -12,7 +12,13 @@ var Envs map[string]string
     if err != nil {
         log.Fatal("Error loading .env file")
     }
-	outfile, _ := os.Create(envs["LOGFILE"]+"-"+runtime) // update path for your needs
+	if _, err := os.Stat(envs["LOGDIR"]); err !=nil {
+		if err := os.MkdirAll(envs["LOGDIR"], os.ModePerm); err != nil {
+			//l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), err)
+			log.Fatal(err)
+		}
+	}
+	outfile, _ := os.Create(envs["LOGDIR"]+"/"+envs["LOGFILE"]+"-"+runtime) // update path for your needs
 	Envs=envs
 	L          = log.New(outfile, "", 0)
 } 
