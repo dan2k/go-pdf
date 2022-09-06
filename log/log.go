@@ -14,7 +14,6 @@ var Envs map[string]string
     }
 	if _, err := os.Stat(envs["LOGDIR"]); err !=nil {
 		if err := os.MkdirAll(envs["LOGDIR"], os.ModePerm); err != nil {
-			//l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), err)
 			log.Fatal(err)
 		}
 	}

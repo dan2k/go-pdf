@@ -47,7 +47,7 @@ func InitBar(totals int) *progressbar.ProgressBar{
 		progressbar.OptionOnCompletion(func(){
 			fmt.Println("")
 			fmt.Println("complete !")
-			l.Println(time.Now().UTC().Format(DDMMYYYYhhmmss), "complete !")
+			l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), "complete !")
 		}),
 	)
 }
@@ -58,15 +58,23 @@ func GenQr(data string,file string) error{
 func InitFlag(){
 	// EndRow :=flag.Int("end",0,"an int ")
 	// StartRow := flag.Int("start", 0, "an int")
-	// fmt.Println(*StartRow,*EndRow);
-	flag.IntVar(&StartRow, "start", 0, "a string var")
-	flag.IntVar(&EndRow, "end", 0, "a string var")
+	flag.IntVar(&StartRow, "start", 1, "a string var")
+	flag.IntVar(&EndRow, "end", 1, "a string var")
+	flag.Usage = func() {                                                  // [4]
+		fmt.Fprintf(os.Stderr, "Options:\n-start int   number of records for start\n-end int number of records for end \nExample:\n./go-pdf -start=1 -end=10 \n")
+	}
+	
 	flag.Parse()
+	if flag.NFlag() !=2 { 
+		flag.Usage()
+		os.Exit(0)
+	}
+	
 	if EndRow <StartRow {
 		fmt.Println("start < end ")	
 		os.Exit(0)
 	}
-	if StartRow <0 {
+	if StartRow <1 {
 		fmt.Println("start < 0")	
 		os.Exit(0)
 	}

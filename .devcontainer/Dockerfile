@@ -4,7 +4,9 @@ RUN apt-get update
 RUN apt install -y libthai0
 RUN apt install -y xfonts-thai
 RUN apt install -y wkhtmltopdf
-
+RUN apt-get install -y tzdata && \
+    ln -sf /usr/share/zoneinfo/Asia/Bangkok /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
 ENV GO111MODULE on
 WORKDIR /var/www
 
