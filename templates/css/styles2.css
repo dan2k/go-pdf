@@ -1,0 +1,74 @@
+body{ 
+    font-family: sans-serif;
+    /*padding:30px;*/
+}
+@media print {
+    .new-page {
+        page-break-before: always !important;
+    }
+   
+}
+
+.container{width:99%;margin: 0 auto;}
+.w-100{
+    width:100%;
+}
+table.roundedCorners { 
+    border: 1px solid rgb(245, 214, 158);
+    border-radius: 0.5em; 
+    border-spacing: 0;
+}
+table.roundedCorners td,
+table.roundedCorners th{ 
+    padding:10px;
+}
+table.roundedCorners th{ 
+    background-color: rgb(245, 214, 158);
+}
+table.roundedCorners tr:first-child > th:first-child {
+    text-align:left;
+    border-top-left-radius: 0.5em;
+}
+table.roundedCorners tr:first-child > th:last-child {
+    border-top-right-radius: 0.5em;
+}
+
+table.bordered{
+    border: thin solid #908787;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+table.bordered td
+,table.bordered th{
+    border: thin solid #908787;
+    background-color: white;
+}
+table.bordered tr:first-child > th:first-child {
+    text-align:left;
+    border-top-left-radius: 0;
+}
+table.bordered tr:first-child > th:last-child {
+    border-top-right-radius: 0;
+}
+
+table.borderless{
+    border: none;
+}
+table.borderless td
+,table.borderless th{
+    border: none;
+    background-color: white;
+    padding:5px;
+}
+
+
+
+.bg-lightblue{
+    background-color: lightblue;
+}
+.bg-lightpink{
+    background-color: lightpink;
+}
+.bg-orange{
+    background-color: rgb(245, 214, 158);
+}

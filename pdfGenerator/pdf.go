@@ -6,9 +6,10 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"strconv"
-	"time"
-
+	// "strconv"
+	"strings"
+	// "time"
+	"github.com/google/uuid"
 	// "fmt"
 	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
 )
@@ -46,9 +47,12 @@ func (r *RequestPdf) ParseTemplate(templateFileName string, data interface{}) er
 //generate pdf function
 func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	
-	t := time.Now().Unix()
+	// t := time.Now().Unix()
 	// write whole the body
-	file:=envs["TEMPDIR"]+"/" + strconv.FormatInt(int64(t), 10) + ".html";
+	u :=uuid.New()
+	id := strings.Replace(u.String(), "-", "", -1)
+	// file := envs["TEMPDIR"] + "/" + strconv.FormatInt(int64(t), 10) + ".html"
+	file := envs["TEMPDIR"] + "/" + id + ".html"
 	// fmt.Println(r.body);
 	err1 := ioutil.WriteFile(file, []byte(r.body), 0644)
 	if err1 != nil {
@@ -72,9 +76,9 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	page.JavascriptDelay.Set(700)
 	pdfg.AddPage(page)
 	pdfg.PageSize.Set(wkhtmltopdf.PageSizeA4)
-	pdfg.Dpi.Set(70)
-	pdfg.ImageDpi.Set(100)
-	pdfg.ImageQuality.Set(50)
+	pdfg.Dpi.Set(100)
+	pdfg.ImageDpi.Set(150)
+	pdfg.ImageQuality.Set(150)
 	pdfg.LowQuality.Set(true)
 	//pdfg.MarginLeft.Set(100)
 	// pdfg.MarginRight.Set(100)
