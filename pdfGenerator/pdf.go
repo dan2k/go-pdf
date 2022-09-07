@@ -69,7 +69,7 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	}
 	page.Allow.Set(workingDir)
 	page.EnableLocalFileAccess.Set(true)
-	page.JavascriptDelay.Set(1000)
+	page.JavascriptDelay.Set(700)
 	pdfg.AddPage(page)
 	pdfg.PageSize.Set(wkhtmltopdf.PageSizeA4)
 	pdfg.Dpi.Set(70)
