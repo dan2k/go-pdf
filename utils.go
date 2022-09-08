@@ -25,6 +25,7 @@ type templateData struct {
 	Pid         string
 	MX			int
 	MY			int
+	Media       string
 }
 var StartRow,EndRow int
 var l *log.Logger

@@ -9,6 +9,12 @@
     <link href="css/styles2.css" rel="stylesheet">
     <script src="js/chart.min.js"></script>
     <style>
+        @media {{ .Media }} {
+            .new-page {
+                page-break-before: always !important;
+            }
+        
+        }
         .section{
             flex-grow:1;
             padding:{{ .MY }}px {{ .MX }}px;

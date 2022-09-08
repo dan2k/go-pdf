@@ -2,12 +2,7 @@ body{
     font-family: sans-serif;
     /*padding:30px;*/
 }
-@media print {
-    .new-page {
-        page-break-before: always !important;
-    }
-   
-}
+
 
 .container{
     width:100%;

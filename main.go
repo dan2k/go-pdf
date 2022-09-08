@@ -96,6 +96,7 @@ func main() {
 			Pid:		 pid,
 			MX:	         mx,
 			MY:	         my,
+			Media:       envs["MEDIA"],
 		}
 		if err := r.ParseTemplate(templatePath, tmp); err == nil {
 			r.GeneratePDF(outputPath+"/"+runtime+"/"+pid+".pdf")
