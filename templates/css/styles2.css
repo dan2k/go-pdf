@@ -17,10 +17,7 @@ body{
     gap: 0px;
     margin: 0 auto;
 }
-.section{
-    flex-grow:1;
-    padding:5px 40px;
-}
+
 .w-100{
     width:100%;
 }

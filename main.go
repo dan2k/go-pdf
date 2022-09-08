@@ -1,10 +1,13 @@
 package main
+
 import (
 	"fmt"
 	u "go-pdf/pdfGenerator"
 	"os"
+	"strconv"
 	"strings"
 	"time"
+
 	"github.com/xuri/excelize/v2"
 )
 
@@ -79,6 +82,8 @@ func main() {
 		if err :=GenQr(pid,qrfile);err != nil {
 			fmt.Println(err)
 		}
+		mx,_ :=strconv.Atoi(envs["MX"])
+		my,_ :=strconv.Atoi(envs["MY"])
 		tmp := templateData{
 			Title:       "HTML to PDF generator",
 			Description: "This is the simple HTML to PDF file.",
@@ -89,6 +94,8 @@ func main() {
 			Data:        []int{12, 19, 3, 5, 2, 3},
 			Qrcode:      t2,
 			Pid:		 pid,
+			MX:	         mx,
+			MY:	         my,
 		}
 		if err := r.ParseTemplate(templatePath, tmp); err == nil {
 			r.GeneratePDF(outputPath+"/"+runtime+"/"+pid+".pdf")

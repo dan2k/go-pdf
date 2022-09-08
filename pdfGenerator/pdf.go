@@ -6,7 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	// "strconv"
+
+	"strconv"
 	"strings"
 	// "time"
 	"github.com/google/uuid"
@@ -73,17 +74,42 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	}
 	page.Allow.Set(workingDir)
 	page.EnableLocalFileAccess.Set(true)
-	page.JavascriptDelay.Set(700)
+	// page.JavascriptDelay.Set(700)
+	js,_:=strconv.ParseUint(envs["JAVASCRIPTDELAY"],10,64)
+	page.JavascriptDelay.Set(uint(js))
 	pdfg.AddPage(page)
 	pdfg.PageSize.Set(wkhtmltopdf.PageSizeA4)
-	pdfg.Dpi.Set(100)
-	pdfg.ImageDpi.Set(150)
-	pdfg.ImageQuality.Set(150)
-	pdfg.LowQuality.Set(true)
+
+	// pdfg.Dpi.Set(100)
+	dpi,_:=strconv.ParseUint(envs["DPI"],10,64)
+	pdfg.Dpi.Set(uint(dpi))
+	// pdfg.ImageDpi.Set(150)
+	imgDpi,_:=strconv.ParseUint(envs["IMAGEDPI"],10,64)
+	pdfg.ImageDpi.Set(uint(imgDpi))
+
+	// pdfg.ImageQuality.Set(150)
+	imageQuality,_:=strconv.ParseUint(envs["IMAGEQUALITY"],10,64)
+	pdfg.ImageQuality.Set(uint(imageQuality))
+	
+	// pdfg.LowQuality.Set(true)
+	lowQuality,_ :=strconv.ParseBool(envs["LOWQUALITY"])
+	pdfg.LowQuality.Set(lowQuality)
+
 	// pdfg.MarginLeft.Set(10)
+	left,_ :=strconv.ParseUint(envs["MARGINLEFT"],10,64)
+	pdfg.MarginLeft.Set(uint(left))
+
 	// pdfg.MarginRight.Set(10)
-	pdfg.MarginTop.Set(5)
-	pdfg.MarginBottom.Set(5)
+	right,_ :=strconv.ParseUint(envs["MARGINRIGHT"],10,64)
+	pdfg.MarginRight.Set(uint(right))
+
+	// pdfg.MarginTop.Set(10)
+	top,_ :=strconv.ParseUint(envs["MARGINTOP"],10,64)
+	pdfg.MarginTop.Set(uint(top))
+
+	// pdfg.MarginBottom.Set(10)
+	bottom,_ :=strconv.ParseUint(envs["MARGINBOTTOM"],10,64)
+	pdfg.MarginBottom.Set(uint(bottom))
 	
 	err = pdfg.Create()
 	if err != nil {

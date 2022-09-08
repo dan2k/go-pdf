@@ -23,6 +23,8 @@ type templateData struct {
 	Data        []int
 	Qrcode      string 
 	Pid         string
+	MX			int
+	MY			int
 }
 var StartRow,EndRow int
 var l *log.Logger
