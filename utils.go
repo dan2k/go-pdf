@@ -7,10 +7,13 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
+	"strconv"
 	rt "runtime"
 	"github.com/schollz/progressbar/v3"
 	qrcode "github.com/skip2/go-qrcode"
 	lo "go-pdf/log"
+	u "go-pdf/pdfGenerator"
 )
 //html template data
 type templateData struct {
@@ -39,6 +42,8 @@ func InitBar(totals int) *progressbar.ProgressBar{
 		progressbar.OptionShowElapsedTimeOnFinish(),
 		progressbar.OptionShowCount(),
 		progressbar.OptionFullWidth(),
+		// progressbar.OptionSetVisibility(true),
+		// progressbar.OptionSetWidth(500),
 		progressbar.OptionSetDescription("กำลังประมวลผล..."),
 		progressbar.OptionSetTheme(progressbar.Theme{
 			Saucer:        "[green]▓[reset]",
@@ -108,4 +113,38 @@ func CallClear() {
     } else { //unsupported platform
         panic("Your platform is unsupported! I can't clear terminal screen :(")
     }
+}
+
+func generate(number int,row []string,qrfile string,templatePath string,outputPath string,r *u.RequestPdf,bar *progressbar.ProgressBar) error{
+	pid:=row[0]
+	t:=strings.Split(qrfile, "/")
+	t2:=strings.Join(t[1:int(len(t))],"/")
+	if err :=GenQr(pid,qrfile);err != nil {
+		fmt.Println(err)
+	}
+	mx,_ :=strconv.Atoi(envs["MX"])
+	my,_ :=strconv.Atoi(envs["MY"])
+	tmp := templateData{
+			Title:       "HTML to PDF generator",
+			Description: "This is the simple HTML to PDF file.",
+			Company:     "Jhon Lewis",
+			Contact:     "Maria Anders",
+			Country:     "Germany",
+			Labels: 	 []string{"Red", "Blue", "Yellow", "Green", "Purple", "Orange"},
+			Data:        []int{12, 19, 3, 5, 2, 3},
+			Qrcode:      t2,
+			Pid:		 pid,
+			MX:	         mx,
+			MY:	         my,
+			Media:       envs["MEDIA"],
+	}
+	if err := r.ParseTemplate(templatePath, tmp); err == nil {
+		r.GeneratePDF(outputPath+"/"+runtime+"/"+pid+".pdf")
+		l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), "PID", pid)
+	} else {
+			fmt.Println(err)
+			l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), err)
+	}
+	bar.Add(1)
+	return nil
 }

@@ -4,18 +4,13 @@ import (
 	"fmt"
 	u "go-pdf/pdfGenerator"
 	"os"
-	"strconv"
-	"strings"
 	"time"
-
 	"github.com/xuri/excelize/v2"
 )
-
 const (
 	DDMMYYYYhhmmss = "2006-01-02 15:04:05"
 	DDMMYYYYhhmmss2 = "20060102150405"
 )
-
 // var runtime =time.Now().In(loc).Format(DDMMYYYYhhmmss2)
 var loc *time.Location
 var runtime string 
@@ -72,41 +67,10 @@ func main() {
 	l.Printf("%s Start generate from %s(%d) to %s(%d) \n",time.Now().In(loc).Format(DDMMYYYYhhmmss),useRows[0][0],StartRow,useRows[len(useRows)-1][0],EndRow)
 	fmt.Printf("Totals %d records \n",len(useRows))
 	l.Printf("%s Totals %d records \n",time.Now().In(loc).Format(DDMMYYYYhhmmss),len(useRows))
-
 	bar:=InitBar(len(useRows))
 	qrfile :=envs["QRCODE"]+"/qr-"+runtime+".png"
 	for i := 0; i < len(useRows); i++ {
-		pid:=useRows[i][0]
-		t:=strings.Split(qrfile, "/")
-		t2:=strings.Join(t[1:int(len(t))],"/")
-		if err :=GenQr(pid,qrfile);err != nil {
-			fmt.Println(err)
-		}
-		mx,_ :=strconv.Atoi(envs["MX"])
-		my,_ :=strconv.Atoi(envs["MY"])
-		tmp := templateData{
-			Title:       "HTML to PDF generator",
-			Description: "This is the simple HTML to PDF file.",
-			Company:     "Jhon Lewis",
-			Contact:     "Maria Anders",
-			Country:     "Germany",
-			Labels: 	 []string{"Red", "Blue", "Yellow", "Green", "Purple", "Orange"},
-			Data:        []int{12, 19, 3, 5, 2, 3},
-			Qrcode:      t2,
-			Pid:		 pid,
-			MX:	         mx,
-			MY:	         my,
-			Media:       envs["MEDIA"],
-		}
-		if err := r.ParseTemplate(templatePath, tmp); err == nil {
-			r.GeneratePDF(outputPath+"/"+runtime+"/"+pid+".pdf")
-			l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), "PID", pid)
-		} else {
-			fmt.Println(err)
-			l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), err)
-		}
-		bar.Add(1)
-		// time.Sleep(1000 * time.Millisecond)
+		go generate(i,useRows[i],qrfile,templatePath,outputPath,r,bar)
 	}
 	defer func() {
 		// Close the spreadsheet.
