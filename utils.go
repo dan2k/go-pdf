@@ -117,6 +117,7 @@ func CallClear() {
 
 func generate(number int,row []string,qrfile string,templatePath string,outputPath string,r *u.RequestPdf,bar *progressbar.ProgressBar) error{
 	pid:=row[0]
+	
 	t:=strings.Split(qrfile, "/")
 	t2:=strings.Join(t[1:int(len(t))],"/")
 	if err :=GenQr(pid,qrfile);err != nil {

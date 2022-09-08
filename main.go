@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 	"github.com/xuri/excelize/v2"
+	"sync"
 )
 const (
 	DDMMYYYYhhmmss = "2006-01-02 15:04:05"
@@ -14,6 +15,7 @@ const (
 // var runtime =time.Now().In(loc).Format(DDMMYYYYhhmmss2)
 var loc *time.Location
 var runtime string 
+var wg sync.WaitGroup
 func main() {
 	
 	lo, _ := time.LoadLocation("Asia/Bangkok")
@@ -70,6 +72,7 @@ func main() {
 	bar:=InitBar(len(useRows))
 	qrfile :=envs["QRCODE"]+"/qr-"+runtime+".png"
 	for i := 0; i < len(useRows); i++ {
+		//fmt.Println("pid=",useRows[i][0])
 		go generate(i,useRows[i],qrfile,templatePath,outputPath,r,bar)
 	}
 	defer func() {
