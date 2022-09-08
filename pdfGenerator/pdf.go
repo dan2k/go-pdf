@@ -80,8 +80,11 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	pdfg.ImageDpi.Set(150)
 	pdfg.ImageQuality.Set(150)
 	pdfg.LowQuality.Set(true)
-	//pdfg.MarginLeft.Set(100)
-	// pdfg.MarginRight.Set(100)
+	// pdfg.MarginLeft.Set(10)
+	// pdfg.MarginRight.Set(10)
+	pdfg.MarginTop.Set(5)
+	pdfg.MarginBottom.Set(5)
+	
 	err = pdfg.Create()
 	if err != nil {
 		l.Fatal(err)

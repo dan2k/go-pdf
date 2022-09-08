@@ -11,217 +11,74 @@
 </head>
     <body>
         <div class="container">
-            <table >
-                <tr>
-                    <td width="95%" valign="top" >
-                        <table  style="width:100%">
-                            <tbody>
-                                <tr>
-                                    <td width="10%">
-                                        <img src="img/Logo-IPST-small.png" width="70px" height="90px" />
-                                    </td>
-                                    <td width="90%">
-                                        <p class="mx-3">
-                                            แบบรายงานผลคะแนนสอบรายบุคคล<span style="font-weight: bold;font-size:24px;">คณิตศาสตร์</span><br>
-                                            โครงการพัฒนาอัจฉริยภาพทางวิทยาศาสตร์และคณิดศาสตร์ ประจำปีการศึกษา 2564
-                                        </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td  colspan="2">
-                                        <table class="roundedCorners w-100">
-                                            <tr><th colspan="2">1.ข้อมูลผู้เข้าสอบ</th></tr>
-                                            <tr><td colspan="2">ชื่อ-นามสกุล</td></tr>
-                                            <tr><td >เลขประจำตัวประชาชน</td><td >เลขประจำตัวผู้เข้าสอบ</td></tr>
-                                            <tr><td colspan="2">ระดับชั้นประถมศึกษาปีที่ 6</td></tr>
-                                            <tr><td >โรงเรียน</td><td >จังหวัด</td></tr>
-                                            <tr><td colspan="2"></td></tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                    <td width="5%" valign="top" align="right">
-                        <img src="{{ .Qrcode }}" width="100px" height="110px">
-                        <br/>
-                        <img src="img/m-small.png" width="100px" height="110px">
-                    </td>
-                </tr>
-            </table>
-            <table class="roundedCorners w-100">
-                <tr><th>2.สถิติของคะแนน</th></tr>
-                <tr>
-                    <td  align="right">
-                        <table  style="width:40%;">
-                            <tbody>
-                                <tr style="background-color:transparent;">
-                                    <td width="50%" align="right">
-                                        <img src="img/r.png" width="80xp" height="90px" />
-                                    </td>
-                                    <td align="right" width="50%">
-                                        <table  style="font-size:12px;width:100%">
-                                            <tbody>
-                                                <tr style="background-color:transparent;">
-                                                    <td align="right" style="padding:5px;">คะแนนเต็ม:</td>
-                                                    <td align="right" style="padding:5px;">25.00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td align="right" style="padding:5px;">คะแนนที่ได้:</td>
-                                                    <td align="right" style="padding:5px;">24.00</td>
-                                                </tr>
-                                                <tr style="background-color:transparent;">
-                                                    <td align="right" style="padding:5px;">เปอร์เซ็นต์ไทล์:</td>
-                                                    <td align="right" style="padding:5px;">99.00</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="w-100">
-                        <div style="width:900px;">
-                            <canvas id="bar" ></canvas>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <table class="w-100 bordered" style="font-size:12px;text-align:center">
-                            <tbody>
-                                <tr >
-                                    <th  colspan="4" style="text-align:center;background-color: rgb(245, 214, 158);">ค่าสถิติพื้นฐานของคะแนนของกลุ่มผู้เข้าสอบทั้งหมด</th>
-                                </tr>
-                                <tr style="background-color: rgb(245, 214, 158);">
-                                    <td style="text-align:center;background-color: rgb(245, 214, 158);">จำนวนผู้เข้าสอบทั้งหมด<br />(คน)</td>
-                                    <td style="text-align:center;background-color: rgb(245, 214, 158);">คะแนน<br />ต่ำสุด - สูงสุด</td>
-                                    <td style="text-align:center;background-color: rgb(245, 214, 158);">คะแนนเฉลี่ย</td>
-                                    <td style="text-align:center;background-color: rgb(245, 214, 158);">ส่วนเบี่ยงเบนมาตราฐาน</td>
-                                </tr>
-                                <tr>
-                                    <td>8.656</td>
-                                    <td>0.00 - 24.00 </td>
-                                    <td>3.41 </td>
-                                    <td>3.62 </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        
-                        <table style="width:100%;background-color:white;padding:0px;margin-top:4px;">
-                            <tbody>
-                                <tr style="background-color:white;">
-                                    <td style="padding:0px;">
-                                        <table class="w-100 bordered" style="font-size:12px;text-align:center">
-                                            <tbody>
-                                                <tr >
-                                                    <td style="background-color:lightblue" colspan="4">
-                                                        <b>ค่าสถิติพื้นฐานของคะแนนของกลุ่มผู้เข้าสอบทั้งหมด</b></td>
-                                                </tr>
-                                                <tr >
-                                                    <td style="background-color:lightblue">จำนวนผู้เข้าสอบทั้งหมด<br />(คน)</td>
-                                                    <td style="background-color:lightblue">คะแนน<br />ต่ำสุด - สูงสุด</td>
-                                                    <td style="background-color:lightblue">คะแนนเฉลี่ย</td>
-                                                    <td style="background-color:lightblue">ส่วนเบี่ยงเบนมาตราฐาน</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>8.656</td>
-                                                    <td>0.00 - 24.00 </td>
-                                                    <td>3.41 </td>
-                                                    <td>3.62 </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                    <td style="padding:0px;">
-                                        <table class="w-100 bordered" style="font-size:12px;text-align:center">
-                                            <tbody>
-                                                <tr >
-                                                    <td style="background-color:lightpink" colspan="4">
-                                                        <b>ค่าสถิติพื้นฐานของคะแนนของกลุ่มผู้เข้าสอบทั้งหมด</b></td>
-                                                </tr>
-                                                <tr >
-                                                    <td style="background-color:lightpink">จำนวนผู้เข้าสอบทั้งหมด<br />(คน)</td>
-                                                    <td style="background-color:lightpink">คะแนน<br />ต่ำสุด - สูงสุด</td>
-                                                    <td style="background-color:lightpink">คะแนนเฉลี่ย</td>
-                                                    <td style="background-color:lightpink">ส่วนเบี่ยงเบนมาตราฐาน</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>8.656</td>
-                                                    <td>0.00 - 24.00 </td>
-                                                    <td>3.41 </td>
-                                                    <td>3.62 </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <div class="new-page"></div>
-            <table class="roundedCorners w-100">
-                <tbody>
-                    <tr><th>3.ผลการทดสอบจำแนกตามตัวชี้วัดอัจฉริยะลักษณะทางคณิตศาสตร์</th></tr>
+            <div class="section">
+
+                <table >
                     <tr>
-                        <td>
-                            <table class="w-100 bordered" style="font-size:12px;text-align:center;font-family: arial, sans-serif;">
-                                <thead>
-                                    <tr>
-                                        <th width="20%" style="text-align:center;background-color: #a0fad6;">ตัวชี้วัด</th>
-                                        <th width="20%" style="text-align:center;background-color: #a0fad6;">จำนวนข้อทั้งหมด</th>
-                                        <th width="20%" style="text-align:center;background-color: #a0fad6;">จำนวนข้อที่ตอบถูก</th>
-                                        <th width="20%" style="text-align:center;background-color: #a0fad6;">ร้อยละข้อที่ตอบถูก</th>
-                                        <th width="20%" style="text-align:center;background-color: #a0fad6;">ค่าเฉลี่ยของร้อยละข้อที่ตอบถูก<br>ของผู้เข้าสอบทั้งหมด</th>
-                                    </tr>
-                                </thead>
+                        <td width="95%" valign="top" >
+                            <table  style="width:100%">
                                 <tbody>
                                     <tr>
-                                        <td>S1</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>100</td>
-                                        <td>17</td>
+                                        <td width="10%">
+                                            <img src="img/Logo-IPST-small.png" width="70px" height="90px" />
+                                        </td>
+                                        <td width="90%">
+                                            <p class="mx-3">
+                                                แบบรายงานผลคะแนนสอบรายบุคคล<span style="font-weight: bold;font-size:24px;">คณิตศาสตร์</span><br>
+                                                โครงการพัฒนาอัจฉริยภาพทางวิทยาศาสตร์และคณิดศาสตร์ ประจำปีการศึกษา 2564
+                                            </p>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>S2</td>
-                                        <td>4</td>
-                                        <td>3</td>
-                                        <td>75</td>
-                                        <td>8</td>
+                                        <td  colspan="2">
+                                            <table class="roundedCorners w-100">
+                                                <tr><th colspan="2">1.ข้อมูลผู้เข้าสอบ</th></tr>
+                                                <tr><td colspan="2">ชื่อ-นามสกุล</td></tr>
+                                                <tr><td >เลขประจำตัวประชาชน</td><td >เลขประจำตัวผู้เข้าสอบ</td></tr>
+                                                <tr><td colspan="2">ระดับชั้นประถมศึกษาปีที่ 6</td></tr>
+                                                <tr><td >โรงเรียน</td><td >จังหวัด</td></tr>
+                                                <tr><td colspan="2"></td></tr>
+                                            </table>
+                                        </td>
                                     </tr>
-                                    <tr>
-                                        <td>S3</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>100</td>
-                                        <td>9</td>
-                                    </tr>
-                                    <tr>
-                                        <td>A1</td>
-                                        <td>2</td>
-                                        <td>2</td>
-                                        <td>100</td>
-                                        <td>22</td>
-                                    </tr>
-                                    <tr>
-                                        <td>A2</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>100</td>
-                                        <td>10</td>
-                                    </tr>
-                                    <tr>
-                                        <td>A3</td>
-                                        <td>4</td>
-                                        <td>4</td>
-                                        <td>100</td>
-                                        <td>20</td>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td width="5%" valign="top" align="right">
+                            <img src="{{ .Qrcode }}" width="100px" height="110px">
+                            <br/>
+                            <img src="img/m-small.png" width="100px" height="110px">
+                        </td>
+                    </tr>
+                </table>
+                <table class="roundedCorners w-100">
+                    <tr><th>2.สถิติของคะแนน</th></tr>
+                    <tr>
+                        <td  align="right">
+                            <table  style="width:40%;">
+                                <tbody>
+                                    <tr style="background-color:transparent;">
+                                        <td width="50%" align="right">
+                                            <img src="img/r.png" width="80xp" height="90px" />
+                                        </td>
+                                        <td align="right" width="50%">
+                                            <table  style="font-size:12px;width:100%">
+                                                <tbody>
+                                                    <tr style="background-color:transparent;">
+                                                        <td align="right" style="padding:5px;">คะแนนเต็ม:</td>
+                                                        <td align="right" style="padding:5px;">25.00</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="right" style="padding:5px;">คะแนนที่ได้:</td>
+                                                        <td align="right" style="padding:5px;">24.00</td>
+                                                    </tr>
+                                                    <tr style="background-color:transparent;">
+                                                        <td align="right" style="padding:5px;">เปอร์เซ็นต์ไทล์:</td>
+                                                        <td align="right" style="padding:5px;">99.00</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -229,84 +86,232 @@
                     </tr>
                     <tr>
                         <td class="w-100">
-                            <div style="width:960px;margin:0 auto;border:2px solid lightblue;">
-                                <canvas id="radar" width="100%"></canvas>
+                            <div style="width:960px;margin:0 auto;">
+                                <canvas id="bar" ></canvas>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <table class="w-100 borderless" style="font-size:14px;">
+                            <table class="w-100 bordered" style="font-size:12px;text-align:center">
                                 <tbody>
-                                    <tr>
-                                        <td colspan="2">ตัวชี้วัดอัจฉริยะลักษณะทางคณิตศาสตร์ ตามแนวทาง สสวท.</td>
-                
+                                    <tr >
+                                        <th  colspan="4" style="text-align:center;background-color: rgb(245, 214, 158);">ค่าสถิติพื้นฐานของคะแนนของกลุ่มผู้เข้าสอบทั้งหมด</th>
+                                    </tr>
+                                    <tr style="background-color: rgb(245, 214, 158);">
+                                        <td style="text-align:center;background-color: rgb(245, 214, 158);">จำนวนผู้เข้าสอบทั้งหมด<br />(คน)</td>
+                                        <td style="text-align:center;background-color: rgb(245, 214, 158);">คะแนน<br />ต่ำสุด - สูงสุด</td>
+                                        <td style="text-align:center;background-color: rgb(245, 214, 158);">คะแนนเฉลี่ย</td>
+                                        <td style="text-align:center;background-color: rgb(245, 214, 158);">ส่วนเบี่ยงเบนมาตราฐาน</td>
                                     </tr>
                                     <tr>
-                                        <td>S1 คือ</td>
-                                        <td>ทักษะการแก้ปัญหา (ข้อ 2,7,9,23 และ 25)</td>
+                                        <td>8.656</td>
+                                        <td>0.00 - 24.00 </td>
+                                        <td>3.41 </td>
+                                        <td>3.62 </td>
                                     </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>เป็นความสามารถในการทำความเข้าใจปัญหา คิดวิเคราะห์ วางแผน แก้ปัญหา
-                                            และเลือกใช้วิธีการที่เหมาะสม โดยคำนึงถึง</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>ความสมเหตุสมผลของคำตอบ พร้อมทั้งตรวจสอบความถูกต้องของคำตอบ เช่น คิดย้อนกลับได้</td>
-                                    </tr>
-                                    <tr>
-                                        <td>S2 คือ</td>
-                                        <td> ทักษะการให้เหตุผล (ข้อ 3, 11, 21 และ 24)</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>เป็นความสามารถในการให้เหตุผล เพื่อนำไปสู่การสรุป โดยมีข้อเท็จจริงทางคณิตศาสตร์รองรับ</td>
-                                    </tr>
-                                    <tr>
-                                        <td>S3 คือ</td>
-                                        <td>ทักษะการเชื่อมโยงและประยุกต์ใช้ (ข้อ 14, 15, 16, 17 และ 18)</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>เป็นความสำมารถในการใช้ความรู้ทางคณิตศาสตร์เป็นเครื่องมือในการเรียนรู้คณิตศาสตร์เนื้อหาต่าง ๆ
-                                            หรือศาสตร์อื่น ๆ</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>และนำไปใช้ในชีวิตจริง เช่น เข้าใจเนื้อหาใหมได้เร็วและมองเห็นมิติสัมพันธ์</td>
-                                    </tr>
-                                    <tr>
-                                        <td>A1 คือ</td>
-                                        <td>พฤติกรรมความสนใจ (ข้อ 10 และ 13)</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>เป็นพฤติกรรมที่บ่งบอกถึงความสนใจทางคณิศาสตร์ เช่น
-                                            แสดงความเข้าใจเนื้อหาคณิตศาสตร์และอธิบายได้</td>
-                                    </tr>
-                                    <tr>
-                                        <td>A2 คือ</td>
-                                        <td>พฤติกรรมการนำไปใช้ (ข้อ 4, 5, 6, 8 และ 19)</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>เป็นพฤติกรรมที่บ่งบอกถึงความสนใจทางคณิตศาสตร์และสามารถนำไปประยุกต์ใช้ได้</td>
-                                    </tr>
-                                    <tr>
-                                        <td>A3 คือ</td>
-                                        <td>พฤติกรรมการสร้างองค์ความรู้ (ข้อ 1, 12, 20 และ 22)</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>เป็นพฤติกรรมที่บ่งบอกความสามารถในการนำข้อมูลที่มีมาสร้างสรรค์ให้เกิดเป็นองค์ความรู้ใหม่</td>
+                                </tbody>
+                            </table>
+                            
+                            <table style="width:100%;background-color:white;padding:0px;margin-top:4px;">
+                                <tbody>
+                                    <tr style="background-color:white;">
+                                        <td style="padding:0px;">
+                                            <table class="w-100 bordered" style="font-size:12px;text-align:center">
+                                                <tbody>
+                                                    <tr >
+                                                        <td style="background-color:lightblue" colspan="4">
+                                                            <b>ค่าสถิติพื้นฐานของคะแนนของกลุ่มผู้เข้าสอบทั้งหมด</b></td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td style="background-color:lightblue">จำนวนผู้เข้าสอบทั้งหมด<br />(คน)</td>
+                                                        <td style="background-color:lightblue">คะแนน<br />ต่ำสุด - สูงสุด</td>
+                                                        <td style="background-color:lightblue">คะแนนเฉลี่ย</td>
+                                                        <td style="background-color:lightblue">ส่วนเบี่ยงเบนมาตราฐาน</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>8.656</td>
+                                                        <td>0.00 - 24.00 </td>
+                                                        <td>3.41 </td>
+                                                        <td>3.62 </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td style="padding:0px;">
+                                            <table class="w-100 bordered" style="font-size:12px;text-align:center">
+                                                <tbody>
+                                                    <tr >
+                                                        <td style="background-color:lightpink" colspan="4">
+                                                            <b>ค่าสถิติพื้นฐานของคะแนนของกลุ่มผู้เข้าสอบทั้งหมด</b></td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td style="background-color:lightpink">จำนวนผู้เข้าสอบทั้งหมด<br />(คน)</td>
+                                                        <td style="background-color:lightpink">คะแนน<br />ต่ำสุด - สูงสุด</td>
+                                                        <td style="background-color:lightpink">คะแนนเฉลี่ย</td>
+                                                        <td style="background-color:lightpink">ส่วนเบี่ยงเบนมาตราฐาน</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>8.656</td>
+                                                        <td>0.00 - 24.00 </td>
+                                                        <td>3.41 </td>
+                                                        <td>3.62 </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </td>
-                </tr>
-                </tbody>
-            </table>
+                    </tr>
+                </table>
+            
+           
+                <div class="new-page"></div>
+                <table class="roundedCorners w-100">
+                    <tbody>
+                        <tr><th>3.ผลการทดสอบจำแนกตามตัวชี้วัดอัจฉริยะลักษณะทางคณิตศาสตร์</th></tr>
+                        <tr>
+                            <td>
+                                <table class="w-100 bordered" style="font-size:12px;text-align:center;font-family: arial, sans-serif;">
+                                    <thead>
+                                        <tr>
+                                            <th width="20%" style="text-align:center;background-color: #a0fad6;">ตัวชี้วัด</th>
+                                            <th width="20%" style="text-align:center;background-color: #a0fad6;">จำนวนข้อทั้งหมด</th>
+                                            <th width="20%" style="text-align:center;background-color: #a0fad6;">จำนวนข้อที่ตอบถูก</th>
+                                            <th width="20%" style="text-align:center;background-color: #a0fad6;">ร้อยละข้อที่ตอบถูก</th>
+                                            <th width="20%" style="text-align:center;background-color: #a0fad6;">ค่าเฉลี่ยของร้อยละข้อที่ตอบถูก<br>ของผู้เข้าสอบทั้งหมด</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>S1</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>100</td>
+                                            <td>17</td>
+                                        </tr>
+                                        <tr>
+                                            <td>S2</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>75</td>
+                                            <td>8</td>
+                                        </tr>
+                                        <tr>
+                                            <td>S3</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>100</td>
+                                            <td>9</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A1</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>100</td>
+                                            <td>22</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A2</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>100</td>
+                                            <td>10</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A3</td>
+                                            <td>4</td>
+                                            <td>4</td>
+                                            <td>100</td>
+                                            <td>20</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="w-100">
+                                <div style="width:960px;margin:0 auto;border:2px solid lightblue;">
+                                    <canvas id="radar" width="100%"></canvas>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table class="w-100 borderless" style="font-size:14px;">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="2">ตัวชี้วัดอัจฉริยะลักษณะทางคณิตศาสตร์ ตามแนวทาง สสวท.</td>
+                    
+                                        </tr>
+                                        <tr>
+                                            <td>S1 คือ</td>
+                                            <td>ทักษะการแก้ปัญหา (ข้อ 2,7,9,23 และ 25)</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>เป็นความสามารถในการทำความเข้าใจปัญหา คิดวิเคราะห์ วางแผน แก้ปัญหา
+                                                และเลือกใช้วิธีการที่เหมาะสม โดยคำนึงถึง</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>ความสมเหตุสมผลของคำตอบ พร้อมทั้งตรวจสอบความถูกต้องของคำตอบ เช่น คิดย้อนกลับได้</td>
+                                        </tr>
+                                        <tr>
+                                            <td>S2 คือ</td>
+                                            <td> ทักษะการให้เหตุผล (ข้อ 3, 11, 21 และ 24)</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>เป็นความสามารถในการให้เหตุผล เพื่อนำไปสู่การสรุป โดยมีข้อเท็จจริงทางคณิตศาสตร์รองรับ</td>
+                                        </tr>
+                                        <tr>
+                                            <td>S3 คือ</td>
+                                            <td>ทักษะการเชื่อมโยงและประยุกต์ใช้ (ข้อ 14, 15, 16, 17 และ 18)</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>เป็นความสำมารถในการใช้ความรู้ทางคณิตศาสตร์เป็นเครื่องมือในการเรียนรู้คณิตศาสตร์เนื้อหาต่าง ๆ
+                                                หรือศาสตร์อื่น ๆ</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>และนำไปใช้ในชีวิตจริง เช่น เข้าใจเนื้อหาใหมได้เร็วและมองเห็นมิติสัมพันธ์</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A1 คือ</td>
+                                            <td>พฤติกรรมความสนใจ (ข้อ 10 และ 13)</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>เป็นพฤติกรรมที่บ่งบอกถึงความสนใจทางคณิศาสตร์ เช่น
+                                                แสดงความเข้าใจเนื้อหาคณิตศาสตร์และอธิบายได้</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A2 คือ</td>
+                                            <td>พฤติกรรมการนำไปใช้ (ข้อ 4, 5, 6, 8 และ 19)</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>เป็นพฤติกรรมที่บ่งบอกถึงความสนใจทางคณิตศาสตร์และสามารถนำไปประยุกต์ใช้ได้</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A3 คือ</td>
+                                            <td>พฤติกรรมการสร้างองค์ความรู้ (ข้อ 1, 12, 20 และ 22)</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>เป็นพฤติกรรมที่บ่งบอกความสามารถในการนำข้อมูลที่มีมาสร้างสรรค์ให้เกิดเป็นองค์ความรู้ใหม่</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         
     </body>

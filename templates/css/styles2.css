@@ -9,7 +9,18 @@ body{
    
 }
 
-.container{width:99%;margin: 0 auto;}
+.container{
+    width:100%;
+    display: flex;
+    justify-content: center;     
+    padding: 0px;
+    gap: 0px;
+    margin: 0 auto;
+}
+.section{
+    flex-grow:1;
+    padding:5px 40px;
+}
 .w-100{
     width:100%;
 }
