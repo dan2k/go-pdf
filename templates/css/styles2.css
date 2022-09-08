@@ -44,7 +44,7 @@ table.bordered{
 table.bordered td
 ,table.bordered th{
     border: thin solid #908787;
-    background-color: white;
+    /* background-color: white; */
 }
 table.bordered tr:first-child > th:first-child {
     text-align:left;
@@ -64,14 +64,15 @@ table.borderless td
     padding:5px;
 }
 
-
-
 .bg-lightblue{
-    background-color: lightblue;
+    background-color: lightblue !important;
 }
 .bg-lightpink{
-    background-color: lightpink;
+    background-color: lightpink !important;
 }
 .bg-orange{
-    background-color: rgb(245, 214, 158);
+    background-color: rgb(245, 214, 158) !important;
+}
+.bg-lightgreen{
+    background-color: rgb(179, 245, 179) !important;
 }
