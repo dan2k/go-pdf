@@ -2,10 +2,12 @@ package pdfGenerator
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 
 	"strconv"
 	"strings"
@@ -33,57 +35,89 @@ func NewRequestPdf(body string,ll *log.Logger,e map[string]string) *RequestPdf {
 
 //parsing template function
 func (r *RequestPdf) ParseTemplate(templateFileName string, data interface{}) error {
-
+	ck:=true
 	t, err := template.ParseFiles(templateFileName)
 	if err != nil {
-		return err
+		ck=false
 	}
 	buf := new(bytes.Buffer)
-	if err = t.Execute(buf, data); err != nil {
-		return err
+	err = t.Execute(buf, data);
+	if  err != nil {
+		ck=false
+	}
+	if !ck {
+		l.Println(templateFileName)
+		// recover()
 	}
 	r.body = buf.String()
-	return nil
+	var e error 
+	if !ck {
+		e=err
+	} else {
+		e=nil
+	}
+	return e  
 }
 
 //generate pdf function
-func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
-	
-	// t := time.Now().Unix()
+func (r *RequestPdf) GeneratePDF(pdfPath string,qrfile string) (bool, error) {
+	ck :=true
+	var e error 
+	t := time.Now().Unix()
 	// write whole the body
 	u :=uuid.New()
 	id := strings.Replace(u.String(), "-", "", -1)
 	// file := envs["TEMPDIR"] + "/" + strconv.FormatInt(int64(t), 10) + ".html"
-	file := envs["TEMPDIR"] + "/" + id + ".html"
+	file := envs["TEMPDIR"] + "/" + id +strconv.FormatInt(int64(t), 10)+ ".html"
 	// fmt.Println(r.body);
 	err1 := ioutil.WriteFile(file, []byte(r.body), 0644)
 	if err1 != nil {
-		panic(err1)
+		// panic(err1)
+		fmt.Println("error=",err1)
+		// l.Fatalln("error=",err1)
+		//l.Println(time.Now(),"error1:", err1)
+		e=err1
+		ck=false
+		
 	}
 	
 	if _, err := os.Stat(file); os.IsNotExist(err) {
-		l.Fatal(err)
+		fmt.Println("error=",err)
+		// l.Fatalln("error=",err)
+		//l.Println(time.Now(),"error2:", err1)
+		e=err
+		ck=false
 	}
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
 	if err != nil {
-		l.Fatal(err)
+		//l.Fatal(err)
+		//l.Println(time.Now(),"error3:", err)
+		ck=false
+		e=err
 	}
 	page :=wkhtmltopdf.NewPage(file)
 	workingDir, err := os.Getwd()
 	if err != nil {
-		panic(err)
+		//l.Println(time.Now(),"error4:", err)
+		ck=false
+		e=err
 	}
 	page.Allow.Set(workingDir)
 	page.EnableLocalFileAccess.Set(true)
+	
 	// page.JavascriptDelay.Set(700)
 	js,_:=strconv.ParseUint(envs["JAVASCRIPTDELAY"],10,64)
 	page.JavascriptDelay.Set(uint(js))
+	// page.LoadErrorHandling.Set("ignore")
+	// page.LoadMediaErrorHandling.Set("ignore")
+	
 	pdfg.AddPage(page)
 	pdfg.PageSize.Set(wkhtmltopdf.PageSizeA4)
 
 	// pdfg.Dpi.Set(100)
 	dpi,_:=strconv.ParseUint(envs["DPI"],10,64)
 	pdfg.Dpi.Set(uint(dpi))
+	
 	// pdfg.ImageDpi.Set(150)
 	imgDpi,_:=strconv.ParseUint(envs["IMAGEDPI"],10,64)
 	pdfg.ImageDpi.Set(uint(imgDpi))
@@ -114,17 +148,36 @@ func (r *RequestPdf) GeneratePDF(pdfPath string) (bool, error) {
 	
 	err = pdfg.Create()
 	if err != nil {
-		l.Fatal(err)
+		
+		//l.Println(time.Now(),"error5:", err)
+		ck=false
+		e=err
 	}
 	err = pdfg.WriteFile(pdfPath)
 	if err != nil {
-		l.Fatal(err)
+		//l.Println(time.Now(),"error6:", err)
+		ck=false
 	}
 	dir, err := os.Getwd()
 	if err != nil {
-		panic(err)
+		//l.Println(time.Now(),"error7:", err)
+		ck=false
+		e=err
+	}
+	if !ck {
+		dir, _ := os.Getwd()
+		os.Remove(dir + "/"+file)
+		os.Remove(dir + "/"+qrfile)
+		
+		// ck=false
+		// l.Println(pdfPath)
+		// recover()
 	}
 	defer os.Remove(dir + "/"+file)
-	return true, nil
+	defer os.Remove(dir + "/"+qrfile)
+	if ck {
+		e=nil
+	}
+	return ck, e
 }
 

@@ -53,6 +53,14 @@ func InitBar(totals int) *progressbar.ProgressBar{
 			BarEnd:        "]",
 		}),
 		progressbar.OptionOnCompletion(func(){
+			dir, err := os.Getwd()
+			if err != nil {
+				panic(err)
+			}
+			fmt.Println("")
+			fmt.Println("Clear temp file......")
+			os.RemoveAll(dir + "/templates/*.html")
+			os.RemoveAll(dir + "/templates/qrcode/"+runtime)
 			fmt.Println("")
 			fmt.Println("complete !")
 			l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), "complete !")
@@ -115,13 +123,12 @@ func CallClear() {
     }
 }
 
-func generate(number int,row []string,qrfile string,templatePath string,outputPath string,r *u.RequestPdf,bar *progressbar.ProgressBar) error{
+func generate(number int,row []string,templatePath string,outputPath string,r *u.RequestPdf,bar *progressbar.ProgressBar) error{
 	pid:=row[0]
+	// qrDir:=envs["TEMPDIR"]+"/qrcode/"+runtime
+	qrfile :=envs["QRCODE"]+"/"+runtime+"/qr-"+pid+".png"
 	t:=strings.Split(qrfile, "/")
 	t2:=strings.Join(t[1:int(len(t))],"/")
-	if err :=GenQr(pid,qrfile);err != nil {
-		fmt.Println(err)
-	}
 	mx,_ :=strconv.Atoi(envs["MX"])
 	my,_ :=strconv.Atoi(envs["MY"])
 	tmp := templateData{
@@ -138,19 +145,34 @@ func generate(number int,row []string,qrfile string,templatePath string,outputPa
 			MY:	         my,
 			Media:       envs["MEDIA"],
 	}
+	ck:=true 
+	if err :=GenQr(pid,qrfile);err != nil {
+		// fmt.Println(err)
+		ck =false 
+	}
 	if err := r.ParseTemplate(templatePath, tmp); err == nil {
-		if ok,err:=r.GeneratePDF(outputPath+"/"+runtime+"/"+pid+".pdf");!ok{
-			fmt.Println(err)
-			l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), err)
-			
+		if ok,_:=r.GeneratePDF(outputPath+"/"+runtime+"/"+pid+".pdf",qrfile);!ok{
+			// fmt.Println(err)
+			// l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), err)
+			// l.Println(pid)
+			ck=false
 		}
-		l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), "PID", pid)
+		// l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), "PID", pid)
 	} else {
-			fmt.Println(err)
-			l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), err)
+			// fmt.Println(err)
+			// l.Println(pid)
+			ck=false 
+			// l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), err)
+	}
+	
+	if !ck{
+		l.Println("number:",number," pid:=",pid)
+		recover()
+		return nil
 	}
 	bar.Add(1)
 	wg.Done()
 	<-guard
+	// c.Done()
 	return nil
 }

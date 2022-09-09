@@ -9,6 +9,7 @@ import (
 	"time"
 	// rt "runtime"
 	"github.com/xuri/excelize/v2"
+	// cp "github.com/otiai10/copy"
 )
 const (
 	DDMMYYYYhhmmss = "2006-01-02 15:04:05"
@@ -21,6 +22,7 @@ var wg sync.WaitGroup
 var guard = make(chan struct{}, 50)
 func main() {
 	// rt.GOMAXPROCS(10)
+	// cp.Copy("templates","temp")
 	lo, _ := time.LoadLocation("Asia/Bangkok")
 	loc=lo
 	runtime =time.Now().In(loc).Format(DDMMYYYYhhmmss2)
@@ -40,6 +42,13 @@ func main() {
 			l.Fatal(err)
 		}
 	}
+	if _, err := os.Stat(envs["TEMPDIR"]+"/qrcode/"+runtime); err !=nil {
+		if err := os.MkdirAll(envs["TEMPDIR"]+"/qrcode/"+runtime, os.ModePerm); err != nil {
+			l.Fatal(err)
+		}
+	}
+	
+
 	outputPath := envs["STORAGE"]
 	//######################################################
 	var xlsFile = envs["EXCELFILE"]
@@ -76,11 +85,11 @@ func main() {
 	fmt.Printf("Totals %d records \n",len(useRows))
 	l.Printf("%s Totals %d records \n",time.Now().In(loc).Format(DDMMYYYYhhmmss),len(useRows))
 	bar:=InitBar(len(useRows))
-	qrfile :=envs["QRCODE"]+"/qr-"+runtime+".png"
+	// qrfile :=envs["QRCODE"]+"/qr-"+runtime+".png"
 	for i := 0; i < len(useRows); i++ {
 		guard <- struct{}{} 
 		wg.Add(1)
-		go generate(i,useRows[i],qrfile,templatePath,outputPath,r,bar)
+		go generate(i,useRows[i],templatePath,outputPath,r,bar)
 	}
 	close(guard)
 	wg.Wait()
@@ -90,16 +99,12 @@ func main() {
 			fmt.Println(err)
 			l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), err)
 		}
-		if _, err := os.Stat(qrfile); err ==nil {
-			dir, err := os.Getwd()
-			if err == nil {
-				os.Remove(dir+"/"+qrfile)
-			}
-		}
-		dir, err := os.Getwd()
-		if err != nil {
-			panic(err)
-		}
-		defer os.RemoveAll(dir + "/templates/*.html")
+		// if _, err := os.Stat(qrfile); err ==nil {
+		// 	dir, err := os.Getwd()
+		// 	if err == nil {
+		// 		os.Remove(dir+"/"+qrfile)
+		// 	}
+		// }
+		
 	}()
 }
