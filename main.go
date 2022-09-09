@@ -82,6 +82,7 @@ func main() {
 		wg.Add(1)
 		go generate(i,useRows[i],qrfile,templatePath,outputPath,r,bar)
 	}
+	close(guard)
 	wg.Wait()
 	defer func() {
 		// Close the spreadsheet.
