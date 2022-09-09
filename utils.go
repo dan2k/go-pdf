@@ -117,7 +117,6 @@ func CallClear() {
 
 func generate(number int,row []string,qrfile string,templatePath string,outputPath string,r *u.RequestPdf,bar *progressbar.ProgressBar) error{
 	pid:=row[0]
-	
 	t:=strings.Split(qrfile, "/")
 	t2:=strings.Join(t[1:int(len(t))],"/")
 	if err :=GenQr(pid,qrfile);err != nil {
@@ -140,12 +139,18 @@ func generate(number int,row []string,qrfile string,templatePath string,outputPa
 			Media:       envs["MEDIA"],
 	}
 	if err := r.ParseTemplate(templatePath, tmp); err == nil {
-		r.GeneratePDF(outputPath+"/"+runtime+"/"+pid+".pdf")
+		if ok,err:=r.GeneratePDF(outputPath+"/"+runtime+"/"+pid+".pdf");!ok{
+			fmt.Println(err)
+			l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), err)
+			
+		}
 		l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), "PID", pid)
 	} else {
 			fmt.Println(err)
 			l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), err)
 	}
 	bar.Add(1)
+	wg.Done()
+	<-guard
 	return nil
 }

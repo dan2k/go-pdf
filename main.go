@@ -4,9 +4,11 @@ import (
 	"fmt"
 	u "go-pdf/pdfGenerator"
 	"os"
-	"time"
-	"github.com/xuri/excelize/v2"
+	"strconv"
 	"sync"
+	"time"
+	// rt "runtime"
+	"github.com/xuri/excelize/v2"
 )
 const (
 	DDMMYYYYhhmmss = "2006-01-02 15:04:05"
@@ -16,8 +18,9 @@ const (
 var loc *time.Location
 var runtime string 
 var wg sync.WaitGroup
+var guard = make(chan struct{}, 50)
 func main() {
-	
+	// rt.GOMAXPROCS(10)
 	lo, _ := time.LoadLocation("Asia/Bangkok")
 	loc=lo
 	runtime =time.Now().In(loc).Format(DDMMYYYYhhmmss2)
@@ -26,7 +29,10 @@ func main() {
 	InitFlag()
 	r := u.NewRequestPdf("",l,envs)
 	//html template path
-	templatePath := envs["TEMPDIR"] + "/" + envs["TEMPFILE"]
+	templatePath := envs["TEMPDIR"] + "/tpl/" + envs["TEMPFILE"]
+	mx,_:=strconv.Atoi(envs["MAXGOROUTINES"])
+	fmt.Println("MAX GOROUTINES PER RUNTIME = ",mx)
+	guard = make(chan struct{}, mx)
 	//#####################################################
 	//path for download pdf
 	if _, err := os.Stat(envs["STORAGE"]); err !=nil {
@@ -72,9 +78,11 @@ func main() {
 	bar:=InitBar(len(useRows))
 	qrfile :=envs["QRCODE"]+"/qr-"+runtime+".png"
 	for i := 0; i < len(useRows); i++ {
-		//fmt.Println("pid=",useRows[i][0])
+		guard <- struct{}{} 
+		wg.Add(1)
 		go generate(i,useRows[i],qrfile,templatePath,outputPath,r,bar)
 	}
+	wg.Wait()
 	defer func() {
 		// Close the spreadsheet.
 		if err := f.Close(); err != nil {
@@ -87,6 +95,10 @@ func main() {
 				os.Remove(dir+"/"+qrfile)
 			}
 		}
-
+		dir, err := os.Getwd()
+		if err != nil {
+			panic(err)
+		}
+		defer os.RemoveAll(dir + "/templates/*.html")
 	}()
 }
