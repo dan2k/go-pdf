@@ -168,7 +168,7 @@ func generate(number int,row []string,templatePath string,outputPath string,r *u
 	if !ck{
 		l.Println("number:",number," pid:=",pid)
 		recover()
-		return nil
+		//return nil
 	}
 	bar.Add(1)
 	wg.Done()
