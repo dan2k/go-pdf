@@ -1,21 +1,23 @@
 package main
 
 import (
-	"fmt"
 	"flag"
-	"time"
+	"fmt"
+	lo "go-pdf/log"
+	u "go-pdf/pdfGenerator"
 	"log"
 	"os"
 	"os/exec"
-	"strings"
-	"strconv"
 	rt "runtime"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/schollz/progressbar/v3"
 	qrcode "github.com/skip2/go-qrcode"
-	lo "go-pdf/log"
-	u "go-pdf/pdfGenerator"
 )
-//html template data
+
+// html template data
 type templateData struct {
 	Title       string
 	Description string
@@ -24,17 +26,18 @@ type templateData struct {
 	Country     string
 	Labels      []string
 	Data        []int
-	Qrcode      string 
+	Qrcode      string
 	Pid         string
-	MX			int
-	MY			int
+	MX          int
+	MY          int
 	Media       string
 }
-var StartRow,EndRow int
+
+var StartRow, EndRow int
 var l *log.Logger
 var envs map[string]string
 var clear map[string]func() //create a map for storing clear funcs
-func InitBar(totals int) *progressbar.ProgressBar{
+func InitBar(totals int) *progressbar.ProgressBar {
 	return progressbar.NewOptions(
 		totals,
 		progressbar.OptionEnableColorCodes(true),
@@ -52,127 +55,111 @@ func InitBar(totals int) *progressbar.ProgressBar{
 			BarStart:      "[",
 			BarEnd:        "]",
 		}),
-		progressbar.OptionOnCompletion(func(){
-			dir, err := os.Getwd()
-			if err != nil {
-				panic(err)
-			}
+		progressbar.OptionOnCompletion(func() {
 			fmt.Println("")
-			fmt.Println("Clear temp file......")
-			os.RemoveAll(dir + "/templates/*.html")
-			os.RemoveAll(dir + "/templates/qrcode/"+runtime)
-			fmt.Println("")
-			fmt.Println("complete !")
-			l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), "complete !")
+			dir, _ := os.Getwd()
+			os.RemoveAll(dir+"/"+envs["TEMPDIR"]+"*/.html")
+			os.RemoveAll(dir+"/"+envs["TEMPDIR"] + "/qrcode/*-" + runtime+".png")
+			genLog("complete !")
 		}),
 	)
 }
-func GenQr(data string,file string) error{
+func GenQr(data string, file string) error {
 	err := qrcode.WriteFile(data, qrcode.Medium, 256, file)
 	return err
 }
-func InitFlag(){
-	// EndRow :=flag.Int("end",0,"an int ")
-	// StartRow := flag.Int("start", 0, "an int")
+func InitFlag() {
 	flag.IntVar(&StartRow, "start", 1, "a string var")
 	flag.IntVar(&EndRow, "end", 1, "a string var")
-	flag.Usage = func() {                                                  // [4]
+	flag.Usage = func() { // [4]
 		fmt.Fprintf(os.Stderr, "Options:\n-start int   number of records for start\n-end int number of records for end \nExample:\n./go-pdf -start=1 -end=10 \n")
 	}
-	
 	flag.Parse()
-	if flag.NFlag() !=2 { 
+	if flag.NFlag() != 2 {
 		flag.Usage()
 		os.Exit(0)
 	}
-	
-	if EndRow <StartRow {
-		fmt.Println("start < end ")	
+
+	if EndRow < StartRow {
+		fmt.Println("start < end ")
 		os.Exit(0)
 	}
-	if StartRow <1 {
-		fmt.Println("start < 0")	
+	if StartRow < 1 {
+		fmt.Println("start < 0")
 		os.Exit(0)
 	}
 }
-func InitLog(){
+func InitLog() {
 	lo.New(runtime)
-	envs =lo.Envs
-	l =lo.L
+	envs = lo.Envs
+	l = lo.L
 }
 func init() {
-    clear = make(map[string]func()) //Initialize it
-    clear["linux"] = func() { 
-        cmd := exec.Command("clear") //Linux example, its tested
-        cmd.Stdout = os.Stdout
-        cmd.Run()
-    }
-    clear["windows"] = func() {
-        cmd := exec.Command("cmd", "/c", "cls") //Windows example, its tested 
-        cmd.Stdout = os.Stdout
-        cmd.Run()
-    }
+	clear = make(map[string]func()) //Initialize it
+	clear["linux"] = func() {
+		cmd := exec.Command("clear") //Linux example, its tested
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	}
+	clear["windows"] = func() {
+		cmd := exec.Command("cmd", "/c", "cls") //Windows example, its tested
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	}
 }
 
 func CallClear() {
-    value, ok := clear[rt.GOOS] //runtime.GOOS -> linux, windows, darwin etc.
-    if ok { //if we defined a clear func for that platform:
-        value()  //we execute it
-    } else { //unsupported platform
-        panic("Your platform is unsupported! I can't clear terminal screen :(")
-    }
+	value, ok := clear[rt.GOOS] //runtime.GOOS -> linux, windows, darwin etc.
+	if ok {                     //if we defined a clear func for that platform:
+		value() //we execute it
+	} else { //unsupported platform
+		panic("Your platform is unsupported! I can't clear terminal screen :(")
+	}
 }
 
-func generate(number int,row []string,templatePath string,outputPath string,r *u.RequestPdf,bar *progressbar.ProgressBar) error{
-	pid:=row[0]
-	// qrDir:=envs["TEMPDIR"]+"/qrcode/"+runtime
-	qrfile :=envs["QRCODE"]+"/"+runtime+"/qr-"+pid+".png"
-	t:=strings.Split(qrfile, "/")
-	t2:=strings.Join(t[1:int(len(t))],"/")
-	mx,_ :=strconv.Atoi(envs["MX"])
-	my,_ :=strconv.Atoi(envs["MY"])
+func generate(number int, row []string, templatePath string, outputPath string, r *u.RequestPdf, bar *progressbar.ProgressBar) error {
+	pid := row[0]
+	qrfile := envs["TEMPDIR"] + "/qrcode/qr-" + pid+"-"	+runtime + ".png"
+	t := strings.Split(qrfile, "/")
+	t2 := strings.Join(t[1:int(len(t))], "/")
+	mx, _ := strconv.Atoi(envs["MX"])
+	my, _ := strconv.Atoi(envs["MY"])
 	tmp := templateData{
-			Title:       "HTML to PDF generator",
-			Description: "This is the simple HTML to PDF file.",
-			Company:     "Jhon Lewis",
-			Contact:     "Maria Anders",
-			Country:     "Germany",
-			Labels: 	 []string{"Red", "Blue", "Yellow", "Green", "Purple", "Orange"},
-			Data:        []int{12, 19, 3, 5, 2, 3},
-			Qrcode:      t2,
-			Pid:		 pid,
-			MX:	         mx,
-			MY:	         my,
-			Media:       envs["MEDIA"],
+		Title:       "HTML to PDF generator",
+		Description: "This is the simple HTML to PDF file.",
+		Company:     "Jhon Lewis",
+		Contact:     "Maria Anders",
+		Country:     "Germany",
+		Labels:      []string{"Red", "Blue", "Yellow", "Green", "Purple", "Orange"},
+		Data:        []int{12, 19, 3, 5, 2, 3},
+		Qrcode:      t2,
+		Pid:         pid,
+		MX:          mx,
+		MY:          my,
+		Media:       envs["MEDIA"],
 	}
-	ck:=true 
-	if err :=GenQr(pid,qrfile);err != nil {
-		// fmt.Println(err)
-		ck =false 
+	ck := true
+	if err := GenQr(pid, qrfile); err != nil {
+		ck = false
 	}
 	if err := r.ParseTemplate(templatePath, tmp); err == nil {
-		if ok,_:=r.GeneratePDF(outputPath+"/"+runtime+"/"+pid+".pdf",qrfile);!ok{
-			// fmt.Println(err)
-			// l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), err)
-			// l.Println(pid)
-			ck=false
+		if ok, _ := r.GeneratePDF(outputPath+"/"+runtime+"/"+pid+".pdf", qrfile); !ok {
+			ck = false
 		}
-		// l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), "PID", pid)
 	} else {
-			// fmt.Println(err)
-			// l.Println(pid)
-			ck=false 
-			// l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), err)
+		ck = false
 	}
-	
-	if !ck{
-		l.Println("number:",number," pid:=",pid)
-		recover()
-		//return nil
+
+	if !ck {
+		l.Println("Regenerate number:", number, " pid:=", pid)
+		generate(number, row, templatePath, outputPath, r, bar)
 	}
 	bar.Add(1)
 	wg.Done()
 	<-guard
-	// c.Done()
 	return nil
+}
+func genLog[T any](V ...T){
+	fmt.Println(V)
+	l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), V)
 }

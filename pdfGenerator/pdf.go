@@ -8,10 +8,8 @@ import (
 	"log"
 	"os"
 	"time"
-
 	"strconv"
 	"strings"
-
 	// "time"
 	"github.com/google/uuid"
 	// "fmt"
@@ -32,7 +30,6 @@ func NewRequestPdf(body string,ll *log.Logger,e map[string]string) *RequestPdf {
 		body: body,
 	}
 }
-
 //parsing template function
 func (r *RequestPdf) ParseTemplate(templateFileName string, data interface{}) error {
 	ck:=true
@@ -67,8 +64,7 @@ func (r *RequestPdf) GeneratePDF(pdfPath string,qrfile string) (bool, error) {
 	// write whole the body
 	u :=uuid.New()
 	id := strings.Replace(u.String(), "-", "", -1)
-	// file := envs["TEMPDIR"] + "/" + strconv.FormatInt(int64(t), 10) + ".html"
-	file := envs["TEMPDIR"] + "/" + id +strconv.FormatInt(int64(t), 10)+ ".html"
+	file := envs["TEMPDIR"]+ "/" + id +strconv.FormatInt(int64(t), 10)+ ".html"
 	// fmt.Println(r.body);
 	err1 := ioutil.WriteFile(file, []byte(r.body), 0644)
 	if err1 != nil {
@@ -104,63 +100,37 @@ func (r *RequestPdf) GeneratePDF(pdfPath string,qrfile string) (bool, error) {
 	}
 	page.Allow.Set(workingDir)
 	page.EnableLocalFileAccess.Set(true)
-	
-	// page.JavascriptDelay.Set(700)
 	js,_:=strconv.ParseUint(envs["JAVASCRIPTDELAY"],10,64)
 	page.JavascriptDelay.Set(uint(js))
-	// page.LoadErrorHandling.Set("ignore")
-	// page.LoadMediaErrorHandling.Set("ignore")
-	
 	pdfg.AddPage(page)
 	pdfg.PageSize.Set(wkhtmltopdf.PageSizeA4)
-
-	// pdfg.Dpi.Set(100)
 	dpi,_:=strconv.ParseUint(envs["DPI"],10,64)
 	pdfg.Dpi.Set(uint(dpi))
-	
-	// pdfg.ImageDpi.Set(150)
 	imgDpi,_:=strconv.ParseUint(envs["IMAGEDPI"],10,64)
 	pdfg.ImageDpi.Set(uint(imgDpi))
-
-	// pdfg.ImageQuality.Set(150)
 	imageQuality,_:=strconv.ParseUint(envs["IMAGEQUALITY"],10,64)
 	pdfg.ImageQuality.Set(uint(imageQuality))
-	
-	// pdfg.LowQuality.Set(true)
 	lowQuality,_ :=strconv.ParseBool(envs["LOWQUALITY"])
 	pdfg.LowQuality.Set(lowQuality)
-
-	// pdfg.MarginLeft.Set(10)
 	left,_ :=strconv.ParseUint(envs["MARGINLEFT"],10,64)
 	pdfg.MarginLeft.Set(uint(left))
-
-	// pdfg.MarginRight.Set(10)
 	right,_ :=strconv.ParseUint(envs["MARGINRIGHT"],10,64)
 	pdfg.MarginRight.Set(uint(right))
-
-	// pdfg.MarginTop.Set(10)
 	top,_ :=strconv.ParseUint(envs["MARGINTOP"],10,64)
 	pdfg.MarginTop.Set(uint(top))
-
-	// pdfg.MarginBottom.Set(10)
 	bottom,_ :=strconv.ParseUint(envs["MARGINBOTTOM"],10,64)
 	pdfg.MarginBottom.Set(uint(bottom))
-	
 	err = pdfg.Create()
 	if err != nil {
-		
-		//l.Println(time.Now(),"error5:", err)
 		ck=false
 		e=err
 	}
 	err = pdfg.WriteFile(pdfPath)
 	if err != nil {
-		//l.Println(time.Now(),"error6:", err)
 		ck=false
 	}
 	dir, err := os.Getwd()
 	if err != nil {
-		//l.Println(time.Now(),"error7:", err)
 		ck=false
 		e=err
 	}
@@ -168,10 +138,6 @@ func (r *RequestPdf) GeneratePDF(pdfPath string,qrfile string) (bool, error) {
 		dir, _ := os.Getwd()
 		os.Remove(dir + "/"+file)
 		os.Remove(dir + "/"+qrfile)
-		
-		// ck=false
-		// l.Println(pdfPath)
-		// recover()
 	}
 	defer os.Remove(dir + "/"+file)
 	defer os.Remove(dir + "/"+qrfile)
