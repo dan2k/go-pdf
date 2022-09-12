@@ -4,14 +4,14 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
-	"io/ioutil"
+	// "io/ioutil"
 	"log"
 	"os"
 	"time"
 	"strconv"
 	"strings"
 	// "time"
-	// "bufio"
+	"bufio"
 	"github.com/google/uuid"
 	// "fmt"
 	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
@@ -68,7 +68,7 @@ func (r *RequestPdf) GeneratePDF(pdfPath string,qrfile string) (bool, error) {
 	file := envs["TEMPDIR"]+ "/" + id +strconv.FormatInt(int64(t), 10)+ ".html"
 	// fmt.Println(r.body);
 
-	err1 := ioutil.WriteFile(file, []byte(r.body), 0644)
+	/* err1 := ioutil.WriteFile(file, []byte(r.body), 0644)
 	if err1 != nil {
 		// panic(err1)
 		fmt.Println("error=",err1)
@@ -77,32 +77,27 @@ func (r *RequestPdf) GeneratePDF(pdfPath string,qrfile string) (bool, error) {
 		e=err1
 		ck=false
 		
-	}
-	/* fi, err := os.Create(file)
+	} */
+	fi, err := os.Create(file)
 	os.Chmod(file,0644)
 	defer fi.Close()
 	w := bufio.NewWriter(fi)
-	n, err := w.WriteString(r.body)
+	 n, err := w.WriteString(r.body)
 	w.Flush() 
-	 */
+	
 	if _, err := os.Stat(file); os.IsNotExist(err) {
-		fmt.Println("error=",err)
-		// l.Fatalln("error=",err)
-		//l.Println(time.Now(),"error2:", err1)
+		fmt.Println("error=",err,n)
 		e=err
 		ck=false
 	}
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
 	if err != nil {
-		//l.Fatal(err)
-		//l.Println(time.Now(),"error3:", err)
 		ck=false
 		e=err
 	}
 	page :=wkhtmltopdf.NewPage(file)
 	workingDir, err := os.Getwd()
 	if err != nil {
-		//l.Println(time.Now(),"error4:", err)
 		ck=false
 		e=err
 	}
