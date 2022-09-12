@@ -1,5 +1,4 @@
 package main
-
 import (
 	"flag"
 	"fmt"
@@ -12,7 +11,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
 	"github.com/schollz/progressbar/v3"
 	qrcode "github.com/skip2/go-qrcode"
 )
@@ -45,8 +43,6 @@ func InitBar(totals int) *progressbar.ProgressBar {
 		progressbar.OptionShowElapsedTimeOnFinish(),
 		progressbar.OptionShowCount(),
 		progressbar.OptionFullWidth(),
-		// progressbar.OptionSetVisibility(true),
-		// progressbar.OptionSetWidth(500),
 		progressbar.OptionSetDescription("กำลังประมวลผล..."),
 		progressbar.OptionSetTheme(progressbar.Theme{
 			Saucer:        "[green]▓[reset]",
@@ -58,8 +54,8 @@ func InitBar(totals int) *progressbar.ProgressBar {
 		progressbar.OptionOnCompletion(func() {
 			fmt.Println("")
 			dir, _ := os.Getwd()
-			os.RemoveAll(dir+"/"+envs["TEMPDIR"]+"*/.html")
-			os.RemoveAll(dir+"/"+envs["TEMPDIR"] + "/qrcode/*-" + runtime+".png")
+			os.RemoveAll(dir + "/" + envs["TEMPDIR"] + "/*-"+runtime+".html")
+			os.RemoveAll(dir + "/" + envs["TEMPDIR"] + "/qrcode/*-" + runtime + ".png")
 			genLog("complete !")
 		}),
 	)
@@ -107,7 +103,6 @@ func init() {
 		cmd.Run()
 	}
 }
-
 func CallClear() {
 	value, ok := clear[rt.GOOS] //runtime.GOOS -> linux, windows, darwin etc.
 	if ok {                     //if we defined a clear func for that platform:
@@ -116,10 +111,9 @@ func CallClear() {
 		panic("Your platform is unsupported! I can't clear terminal screen :(")
 	}
 }
-
 func generate(number int, row []string, templatePath string, outputPath string, r *u.RequestPdf, bar *progressbar.ProgressBar) error {
 	pid := row[0]
-	qrfile := envs["TEMPDIR"] + "/qrcode/qr-" + pid+"-"	+runtime + ".png"
+	qrfile := envs["TEMPDIR"] + "/qrcode/qr-" + pid + "-" + runtime + ".png"
 	t := strings.Split(qrfile, "/")
 	t2 := strings.Join(t[1:int(len(t))], "/")
 	mx, _ := strconv.Atoi(envs["MX"])
@@ -143,13 +137,12 @@ func generate(number int, row []string, templatePath string, outputPath string, 
 		ck = false
 	}
 	if err := r.ParseTemplate(templatePath, tmp); err == nil {
-		if ok, _ := r.GeneratePDF(outputPath+"/"+runtime+"/"+pid+".pdf", qrfile); !ok {
+		if ok, _ := r.GeneratePDF(outputPath+"/"+runtime+"/"+pid+".pdf", qrfile,runtime); !ok {
 			ck = false
 		}
 	} else {
 		ck = false
 	}
-
 	if !ck {
 		l.Println("Regenerate number:", number, " pid:=", pid)
 		generate(number, row, templatePath, outputPath, r, bar)
@@ -159,7 +152,7 @@ func generate(number int, row []string, templatePath string, outputPath string, 
 	<-guard
 	return nil
 }
-func genLog[T any](V ...T){
+func genLog[T any](V ...T) {
 	fmt.Println(V)
 	l.Println(time.Now().In(loc).Format(DDMMYYYYhhmmss), V)
 }

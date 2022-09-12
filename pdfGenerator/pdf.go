@@ -4,19 +4,14 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
-	// "io/ioutil"
 	"log"
 	"os"
-	"time"
 	"strconv"
 	"strings"
-	// "time"
 	"bufio"
 	"github.com/google/uuid"
-	// "fmt"
 	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
 )
-
 //pdf requestpdf struct
 type RequestPdf struct {
 	body string
@@ -56,35 +51,21 @@ func (r *RequestPdf) ParseTemplate(templateFileName string, data interface{}) er
 	}
 	return e  
 }
-
 //generate pdf function
-func (r *RequestPdf) GeneratePDF(pdfPath string,qrfile string) (bool, error) {
+func (r *RequestPdf) GeneratePDF(pdfPath string,qrfile string,runtime string) (bool, error) {
 	ck :=true
 	var e error 
-	t := time.Now().Unix()
 	// write whole the body
 	u :=uuid.New()
 	id := strings.Replace(u.String(), "-", "", -1)
-	file := envs["TEMPDIR"]+ "/" + id +strconv.FormatInt(int64(t), 10)+ ".html"
+	file := envs["TEMPDIR"]+ "/" + id +"-"+runtime+ ".html"
 	// fmt.Println(r.body);
-
-	/* err1 := ioutil.WriteFile(file, []byte(r.body), 0644)
-	if err1 != nil {
-		// panic(err1)
-		fmt.Println("error=",err1)
-		// l.Fatalln("error=",err1)
-		//l.Println(time.Now(),"error1:", err1)
-		e=err1
-		ck=false
-		
-	} */
-	fi, err := os.Create(file)
-	os.Chmod(file,0644)
-	defer fi.Close()
+	fi, _ := os.Create(file)
+	os.Chmod(file,os.FileMode(0644))
+	// fi.Sync()
 	w := bufio.NewWriter(fi)
-	 n, err := w.WriteString(r.body)
-	w.Flush() 
-	
+	 n, _ := w.WriteString(r.body)
+	w.Flush()
 	if _, err := os.Stat(file); os.IsNotExist(err) {
 		fmt.Println("error=",err,n)
 		e=err
@@ -137,16 +118,11 @@ func (r *RequestPdf) GeneratePDF(pdfPath string,qrfile string) (bool, error) {
 		ck=false
 		e=err
 	}
-	if !ck {
-		dir, _ := os.Getwd()
-		os.Remove(dir + "/"+file)
-		os.Remove(dir + "/"+qrfile)
-	}
 	defer os.Remove(dir + "/"+file)
 	defer os.Remove(dir + "/"+qrfile)
+	defer fi.Close()
 	if ck {
 		e=nil
 	}
 	return ck, e
 }
-

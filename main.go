@@ -1,5 +1,4 @@
 package main
-
 import (
 	u "go-pdf/pdfGenerator"
 	"os"
@@ -8,7 +7,6 @@ import (
 	"time"
 	"github.com/xuri/excelize/v2"
 )
-
 const (
 	DDMMYYYYhhmmss  = "2006-01-02 15:04:05"
 	DDMMYYYYhhmmss2 = "20060102150405"
@@ -54,10 +52,10 @@ func main() {
 		genLog(err)
 		return
 	}
+	defer f.Close();
 	genLog("Open file complete!")
 	// Get value from cell by given worksheet name and axis.
 	rows, err := f.GetRows("Sheet1")
-
 	if err != nil {
 		genLog(err)
 		return
@@ -66,7 +64,6 @@ func main() {
 		genLog(err)
 	}
 	if EndRow > (len(rows) - 1) {
-		// fmt.Println("end > ", len(rows)-1)
 		genLog("end > ",strconv.Itoa(len(rows)-1))
 		return
 	}
@@ -81,16 +78,4 @@ func main() {
 	}
 	close(guard)
 	wg.Wait()
-
-	defer func() {
-		// Close the spreadsheet.
-		
-		
-		
-		if err := f.Close(); err != nil {
-			genLog(err)
-		}
-		
-	}()
 }
-
